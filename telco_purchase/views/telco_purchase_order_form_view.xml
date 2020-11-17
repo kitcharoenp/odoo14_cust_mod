@@ -1,0 +1,107 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<odoo>
+
+  <record id="telco_purchase_order_form_view" model="ir.ui.view">
+      <field name="name">telco purchase order form</field>
+      <field name="model">purchase.order</field>
+      <field name="inherit_id"
+          ref="purchase.purchase_order_form"/>
+      <field name="arch" type="xml">
+
+        <!-- button action default purchase line tax -->
+        <div name="button_box" position="inside">
+          <button type="object"
+              name="action_default_purchase_line_taxs"
+              string="Default Taxs"
+              class="oe_stat_button"
+              icon="fa-magic"
+              attrs="{'invisible':[('state', 'in', ('done','cancel'))]}">
+          </button>
+        </div>
+
+        <!-- change online editable to popup -->
+        <xpath expr="//notebook/page[1]/field/tree"
+            position="attributes">
+            <attribute name='editable'></attribute>
+        </xpath>
+
+        <!-- invisible product_id in Products tab -->
+        <xpath expr="//notebook/page[1]/field/tree/field[@name='product_id']"
+            position="replace">
+            <field name="product_id" invisible="1"/>
+        </xpath>
+
+        <!-- replace product_uom  -->
+        <xpath expr="//notebook/page[1]/field/tree/field[@name='product_uom']"
+            position="replace">
+            <field name="product_uom" groups="product.group_uom"/>
+        </xpath>
+
+        <!-- invisible company_id field -->
+        <xpath expr="//notebook/page[1]/field/tree/field[@name='company_id']"
+            position="attributes">
+            <attribute name='invisible'>1</attribute>
+        </xpath>
+
+        <!-- invisible date_planned in Products tab -->
+        <xpath expr="//notebook/page[1]/field/tree/field[@name='date_planned']"
+            position="replace">
+            <field name="date_planned" invisible="1"/>
+        </xpath>
+
+        <!-- replace date order  by project  -->
+        <xpath expr="//field[@name='date_order']"
+            position="replace">
+            <field name="x_account_analytic_id"
+              string="Project"
+              options="{'no_create': True}"/>
+        </xpath>
+
+        <!-- replace partner reference by po ref  -->
+        <xpath expr="//field[@name='partner_ref']"
+            position="replace">
+            <field name="x_other_ref"
+              string="PO ref."/>
+        </xpath>
+
+        <!-- replace partner reference by po ref  -->
+        <xpath expr="//field[@name='origin']"
+            position="replace">
+            <field name="date_order"/>
+        </xpath>
+
+        <!-- append Telco to Product tab -->
+        <xpath expr="//form/sheet/notebook/page[1]" position="after">
+          <page string="Telco">
+            <group>
+              <group>
+                <field name="x_issue_date"/>
+                <field name="partner_ref"/>
+                <field name="origin"/>
+                <field name="x_service_order"/>
+                <field name="x_circuit_id"/>
+                <field name="x_sap_network"/>
+              </group>
+              <group>
+                <field name="x_invoice_receipt_by"
+                  options="{'no_create': True}"/>
+                <field name="x_invoice_receipt_date"
+                  string="Receipt Date"/>
+                <field name="x_manager_id"
+                  options="{'no_create': True}"/>
+                <field name="x_verified_id"
+                    options="{'no_create': True}"/>
+                <field name="x_requestor_id"
+                  options="{'no_create': True}"/>
+              </group>
+              <group colspan="2">
+                  <field name="x_description"/>
+              </group>
+            </group>
+          </page>
+        </xpath>
+
+      </field>
+  </record>
+
+</odoo>
