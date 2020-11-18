@@ -7,7 +7,7 @@
     'name': 'Telco Account Invoice',
     'version': '0.01',
     'category': 'Accounting',
-    "author": "kicharoenp@gmail.com",
+    "author": "Kitcharoen Poolperm <kitcharoenp@gmail.com>",
     'summary': 'Account Invoice',
     'description': """
     """,

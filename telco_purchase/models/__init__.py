@@ -1,4 +1,4 @@
 # -*- coding: utf-8 -*-
-import res_company
-import purchase
-import res_partner
+from . import res_company
+from . import purchase
+from . import res_partner
