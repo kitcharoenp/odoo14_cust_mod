@@ -11,7 +11,7 @@
     'summary': 'Account Invoice',
     'description': """
     """,
-    'depends': ['account', 'account_asset'],
+    'depends': ['account'],
     'data': [
         # Views
         'views/telco_acc_inv_asset_category_form_view.xml',
