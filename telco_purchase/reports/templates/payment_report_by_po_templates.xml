@@ -1,12 +1,8 @@
 <?xml version="1.0" encoding="utf-8"?>
 <odoo>
 
-  <template id="payment_report_by_po_layout" inherit_id="web.external_layout_background" primary="True">
-
-  </template>
-
 <template id="payment_report_by_po_document">
-    <t t-call="telco_purchase.payment_report_by_po_layout">
+    <t t-call="web.external_layout_background">
         <t t-set="o" t-value="o.with_context({'lang':o.partner_id.lang})"/>
         <div class="page">
           <!-- include CSS  -->
