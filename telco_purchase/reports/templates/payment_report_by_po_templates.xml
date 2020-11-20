@@ -595,7 +595,7 @@
                     </t>
 
                 </tbody>
-
+<!--
                 <t t-set="account_invoice_taxs" t-value="[]"/>
                 <t t-foreach="invoices_show" t-as="invoice_id">
                   <t t-foreach="invoice_id.tax_line_ids" t-as="tax_line_id">
@@ -609,7 +609,7 @@
                       <t t-set="account_taxs" t-value="account_taxs + [account_invoice_tax.tax_id]"/>
                   </t>
                 </t>
-
+-->
                 <!-- table foot
                 <tfoot> -->
 
