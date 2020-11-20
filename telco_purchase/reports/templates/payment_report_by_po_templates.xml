@@ -249,7 +249,7 @@
                       </td>
                       <td class="text-left col-xs-6" style="font-size: 12px;">
                           <span t-if="purchase_line_id.name"
-                            t-field="purchase_line_id.name"/>amount_untaxed
+                            t-field="purchase_line_id.name"/>
                           <span t-else=""
                             t-field="purchase_line_id.name"/>
                       </td>
