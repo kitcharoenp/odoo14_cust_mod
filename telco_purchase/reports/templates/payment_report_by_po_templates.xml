@@ -90,7 +90,7 @@
                           </strong>
                           <br/>
                             <t t-if="len(invoice_ids_sorted) == 4 and  archived[0].invoice_date">
-                              <strong>b@<span t-field="archived[0]."/></strong> <br/>
+                              <strong>b@<span t-field="archived[0].invoice_date"/></strong> <br/>
                             </t>
                             <t t-if="len(invoice_ids_sorted) == 4 and  archived[0].reference">
                               <strong><span t-field="archived[0].reference"/></strong><br/>
@@ -109,8 +109,8 @@
                                 <u t-field="invoice_id.number"/><br/>
                               </t>
                             -->
-                              <t t-if="invoice_id.">
-                                <strong>b@<span t-field="invoice_id."/></strong> <br/>
+                              <t t-if="invoice_id.invoice_date">
+                                <strong>b@<span t-field="invoice_id.invoice_date"/></strong> <br/>
                               </t>
                               <t t-if="invoice_id.reference">
                                 <strong><span t-field="invoice_id.reference"/></strong><br/>
