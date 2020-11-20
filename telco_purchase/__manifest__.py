@@ -17,7 +17,7 @@
         5. Default purchase tax vendor
     """,
     'depends': ['purchase',
-                'telco_account_invoice',
+                'telco_account_move',
                 ],
     'data': [
         'data/telco_purchase_sequence_data.xml',

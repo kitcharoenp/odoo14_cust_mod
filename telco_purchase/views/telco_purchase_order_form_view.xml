@@ -19,34 +19,33 @@
           </button>
         </div>
 
-        <!-- change online editable to popup -->
-        <xpath expr="//notebook/page[1]/field/tree"
-            position="attributes">
-            <attribute name='editable'></attribute>
-        </xpath>
-
-        <!-- invisible product_id in Products tab -->
+        <!-- overide product_id in Products tab -->
         <xpath expr="//notebook/page[1]/field/tree/field[@name='product_id']"
             position="replace">
-            <field name="product_id" invisible="1"/>
-        </xpath>
-
-        <!-- replace product_uom  -->
-        <xpath expr="//notebook/page[1]/field/tree/field[@name='product_uom']"
-            position="replace">
-            <field name="product_uom" groups="product.group_uom"/>
-        </xpath>
-
-        <!-- invisible company_id field -->
-        <xpath expr="//notebook/page[1]/field/tree/field[@name='company_id']"
-            position="attributes">
-            <attribute name='invisible'>1</attribute>
-        </xpath>
-
-        <!-- invisible date_planned in Products tab -->
-        <xpath expr="//notebook/page[1]/field/tree/field[@name='date_planned']"
-            position="replace">
-            <field name="date_planned" invisible="1"/>
+            <field
+              name="product_id"
+              attrs="{
+                  'readonly': [(
+                      'state',
+                      'in',
+                      ('purchase', 'to approve','done', 'cancel')
+                    )],
+                  'required': [('display_type', '=', False)],
+              }"
+              context="{
+                'partner_id':parent.partner_id,
+                'quantity':product_qty,
+                'uom':product_uom,
+                'company_id': parent.company_id
+                }"
+              force_save="1"
+              domain="[
+                ('purchase_ok', '=', True),
+                 '|',
+                 ('company_id', '=', False),
+                 ('company_id', '=', parent.company_id)
+                ]"
+              optional="show"/>
         </xpath>
 
         <!-- replace date order  by project  -->
@@ -75,7 +74,6 @@
           <page string="Telco">
             <group>
               <group>
-                <field name="x_issue_date"/>
                 <field name="partner_ref"/>
                 <field name="origin"/>
                 <field name="x_service_order"/>

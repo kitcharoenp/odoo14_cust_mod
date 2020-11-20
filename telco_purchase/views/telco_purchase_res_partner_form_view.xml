@@ -2,7 +2,7 @@
 <odoo>
 
   <record id="telco_purchase_res_partner_form_view" model="ir.ui.view">
-    <field name="name">Inherit res_partner form iew </field>
+    <field name="name">TelcoResPartnerFormView</field>
     <field name="model">res.partner</field>
     <field name="inherit_id" ref="base.view_partner_form" />
     <field name="priority" eval="20"/>
