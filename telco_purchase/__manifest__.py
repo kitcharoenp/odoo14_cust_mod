@@ -29,8 +29,8 @@
         # Search
         'views/telco_purchase_order_search_view.xml',
         # Reports and Templates
-        'reports/telco_purchase_report.xml',
-        'reports/templates/payment_report_by_po_templates.xml',
+        #'reports/telco_purchase_report.xml',
+        #'reports/templates/payment_report_by_po_templates.xml',
     ],
     'installable': True,
     'auto_install': False,
