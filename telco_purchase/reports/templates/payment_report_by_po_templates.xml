@@ -165,7 +165,7 @@
                         <t t-foreach="archived" t-as="invoice_id_sorted">
                                   <!-- find invoice_line in each invoice_id -->
                                   <t t-foreach="line.invoice_lines" t-as="invoice_line">
-                                      <t t-if="invoice_id_sorted.id == invoice_line.invoice_id.id">
+                                      <t t-if="invoice_id_sorted.id == invoice_line.move_id.id">
                                         <t t-set="total_archived" t-value="total_archived+(invoice_line.quantity * invoice_line.price_unit)"/>
                                         <!-- sum purchase invoice line total -->
                                         <t t-set="total" t-value="total+(invoice_line.quantity * invoice_line.price_unit)"/>
@@ -183,7 +183,7 @@
                               <td class="text-right">
                                 <!-- find invoice_line in each invoice_id -->
                                 <t t-foreach="line.invoice_lines" t-as="invoice_line">
-                                    <t t-if="invoice_id_sorted.id == invoice_line.invoice_id.id">
+                                    <t t-if="invoice_id_sorted.id == invoice_line.move_id.id">
                                       <span t-if="invoice_line.quantity > 0"
                                         t-esc="'{0:,.2f}'.format(float(invoice_line.quantity * invoice_line.price_unit))"
                                         t-options='{"widget": "False"}'/>
@@ -279,7 +279,7 @@
                       <t t-foreach="archived" t-as="invoice_id_sorted">
                                 <!-- find invoice_line in each invoice_id -->
                                 <t t-foreach="inv_line_from_other_po" t-as="invoice_line">
-                                    <t t-if="invoice_id_sorted.id == invoice_line.invoice_id.id and invoice_line.purchase_line_id.id == purchase_line_id.id">
+                                    <t t-if="invoice_id_sorted.id == invoice_line.move_id.id and invoice_line.purchase_line_id.id == purchase_line_id.id">
                                       <t t-set="total_archived_other" t-value="total_archived_other+(invoice_line.quantity * invoice_line.price_unit)"/>
                                       <!-- sum purchase invoice line total -->
                                       <t t-set="total" t-value="total+(invoice_line.quantity * invoice_line.price_unit)"/>
@@ -298,7 +298,7 @@
                         <td class="text-right">
                         <t t-foreach="inv_line_from_other_po" t-as="line_other_po">
                               <!-- find invoice_line in each invoice_id -->
-                          <t t-if="invoice_id_sorted.id == line_other_po.invoice_id.id and line_other_po.purchase_line_id.id == purchase_line_id.id">
+                          <t t-if="invoice_id_sorted.id == line_other_po.move_id.id and line_other_po.purchase_line_id.id == purchase_line_id.id">
 
                                     <span t-if="line_other_po.quantity > 0"
                                       t-esc="'{0:,.2f}'.format(float(line_other_po.quantity * line_other_po.price_unit))"
@@ -371,7 +371,7 @@
                                 <t t-foreach="archived" t-as="invoice_id_sorted">
                                         <!-- find invoice_line in each invoice_id -->
                                         <t t-foreach="line.invoice_lines" t-as="invoice_line">
-                                            <t t-if="invoice_id_sorted.id == invoice_line.invoice_id.id">
+                                            <t t-if="invoice_id_sorted.id == invoice_line.move_id.id">
                                               <t t-set="total_archived" t-value="total_archived+(invoice_line.quantity * invoice_line.price_unit)"/>
                                               <!-- sum purchase invoice line total -->
                                               <t t-set="total" t-value="total+(invoice_line.quantity * invoice_line.price_unit)"/>
@@ -389,7 +389,7 @@
                                     <td class="text-right">
                                       <!-- find invoice_line in each invoice_id -->
                                       <t t-foreach="line.invoice_lines" t-as="invoice_line">
-                                          <t t-if="invoice_id_sorted.id == invoice_line.invoice_id.id">
+                                          <t t-if="invoice_id_sorted.id == invoice_line.move_id.id">
                                             <span
                                               t-esc="'{0:,.2f}'.format(float(invoice_line.quantity * invoice_line.price_unit))"
                                               t-options='{"widget": "False"}'/>
@@ -458,7 +458,7 @@
                         <t t-foreach="archived" t-as="invoice_id_sorted">
                                   <!-- find invoice_line in each invoice_id -->
                                   <t t-foreach="inv_line_from_other_po" t-as="invoice_line">
-                                      <t t-if="invoice_id_sorted.id == invoice_line.invoice_id.id and invoice_line.purchase_line_id.id == purchase_line_id.id">
+                                      <t t-if="invoice_id_sorted.id == invoice_line.move_id.id and invoice_line.purchase_line_id.id == purchase_line_id.id">
                                         <t t-set="total_archived_other" t-value="total_archived_other+(invoice_line.quantity * invoice_line.price_unit)"/>
                                         <!-- sum purchase invoice line total -->
                                         <t t-set="total" t-value="total+(invoice_line.quantity * invoice_line.price_unit)"/>
@@ -477,7 +477,7 @@
                           <td class="text-right">
                           <t t-foreach="inv_line_from_other_po" t-as="line_other_po">
                                 <!-- find invoice_line in each invoice_id -->
-                            <t t-if="invoice_id_sorted.id == line_other_po.invoice_id.id and line_other_po.purchase_line_id.id == purchase_line_id.id">
+                            <t t-if="invoice_id_sorted.id == line_other_po.move_id.id and line_other_po.purchase_line_id.id == purchase_line_id.id">
 
                                       <span t-if="line_other_po.quantity != 0"
                                         t-esc="'{0:,.2f}'.format(float(line_other_po.quantity * line_other_po.price_unit))"
@@ -544,7 +544,7 @@
                         <t t-foreach="archived" t-as="invoice_id_sorted">
                                   <!-- find invoice_line in each invoice_id -->
                                   <t t-foreach="inv_line_from_other_po" t-as="invoice_line">
-                                      <t t-if="invoice_id_sorted.id == invoice_line.invoice_id.id and invoice_line.id == inv_line.id">
+                                      <t t-if="invoice_id_sorted.id == invoice_line.move_id.id and invoice_line.id == inv_line.id">
                                         <t t-set="total_archived_other" t-value="total_archived_other+(invoice_line.quantity * invoice_line.price_unit)"/>
                                         <!-- sum invoice line total -->
                                         <t t-set="total" t-value="total+(invoice_line.quantity * invoice_line.price_unit)"/>
@@ -563,7 +563,7 @@
                           <td class="text-right">
                           <t t-foreach="inv_line_from_other_po" t-as="line_other_po">
                                 <!-- find invoice_line in each invoice_id -->
-                            <t t-if="invoice_id_sorted.id == line_other_po.invoice_id.id and line_other_po.id == inv_line.id">
+                            <t t-if="invoice_id_sorted.id == line_other_po.move_id.id and line_other_po.id == inv_line.id">
 
                                       <span t-if="line_other_po.quantity != 0"
                                         t-esc="'{0:,.2f}'.format(float(line_other_po.quantity * line_other_po.price_unit))"
