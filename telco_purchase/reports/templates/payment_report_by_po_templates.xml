@@ -89,8 +89,8 @@
                             #1 <t t-if="lot > 1"> - <span t-esc="lot"/></t>
                           </strong>
                           <br/>
-                            <t t-if="len(invoice_ids_sorted) == 4 and  archived[0].date_invoice">
-                              <strong>b@<span t-field="archived[0].date_invoice"/></strong> <br/>
+                            <t t-if="len(invoice_ids_sorted) == 4 and  archived[0].invoice_date">
+                              <strong>b@<span t-field="archived[0]."/></strong> <br/>
                             </t>
                             <t t-if="len(invoice_ids_sorted) == 4 and  archived[0].reference">
                               <strong><span t-field="archived[0].reference"/></strong><br/>
@@ -109,8 +109,8 @@
                                 <u t-field="invoice_id.number"/><br/>
                               </t>
                             -->
-                              <t t-if="invoice_id.date_invoice">
-                                <strong>b@<span t-field="invoice_id.date_invoice"/></strong> <br/>
+                              <t t-if="invoice_id.">
+                                <strong>b@<span t-field="invoice_id."/></strong> <br/>
                               </t>
                               <t t-if="invoice_id.reference">
                                 <strong><span t-field="invoice_id.reference"/></strong><br/>
