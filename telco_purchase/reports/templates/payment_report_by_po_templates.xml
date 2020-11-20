@@ -214,7 +214,7 @@
 
                     <t t-foreach="invoice_ids_sorted" t-as="invoice_id_sorted">
                       <t t-foreach="invoice_id_sorted.invoice_line_ids" t-as="inv_line">
-                        <t t-if="inv_line.purchase_id.id != o.id">
+                        <t t-if="inv_line.purchase_order_id.id != o.id">
                           <t  t-set="inv_line_from_other_po" t-value="inv_line_from_other_po + [inv_line]"/>
                         </t>
                       </t>
