@@ -35,7 +35,6 @@ class PurchaseOrder(models.Model):
     x_circuit_id = fields.Char(string='Circuit Id')
     x_sap_network = fields.Char(string='Sap Network')
 
-    @api.multi
     @api.depends('name', 'partner_ref')
     def name_get(self):
         result = super(PurchaseOrder, self).name_get()
@@ -46,7 +45,6 @@ class PurchaseOrder(models.Model):
         return result
 
     # update order_line taxes with default purchase vendor taxs
-    @api.multi
     def action_default_purchase_line_taxs(self):
         for order in self:
             order.order_line.update({
