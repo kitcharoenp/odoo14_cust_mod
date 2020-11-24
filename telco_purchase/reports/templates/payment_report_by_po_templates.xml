@@ -675,6 +675,143 @@
                         </th>
                     </tr>
 
+                    <!-- payment -->
+                    <tr style="background-color: #98fb98;">
+                        <th colspan="2"><strong>Payment</strong></th>
+                        <th class="text-right"><strong></strong></th>
+
+                        <t t-set="archived_amount_total" t-value="0" />
+                        <!-- calculate archived amount total-->
+                        <t t-foreach="archived" t-as="invoice_id">
+                            <t t-set="archived_amount_total"
+                              t-value="archived_amount_total + invoice_id.amount_total" />
+                        </t>
+
+                        <td t-if="len(invoice_ids_sorted) > 3" class="text-right" style="font-size:11px;">
+                          <p>
+
+                            <!-- payment due date -->
+                            <t t-if='len(invoice_ids_sorted) == 4 and archived[0].date_due'>
+                              <strong>Paid on</strong>
+                              <br/>
+                              <strong><!-- payment -->
+                    <tr style="background-color: #98fb98;">
+                        <th colspan="2"><strong>Payment</strong></th>
+                        <th class="text-right"><strong></strong></th>
+
+                        <t t-set="archived_amount_total" t-value="0" />
+                        <!-- calculate archived amount total-->
+                        <t t-foreach="archived" t-as="invoice_id">
+                            <t t-set="archived_amount_total"
+                              t-value="archived_amount_total + invoice_id.amount_total" />
+                        </t>
+
+                        <td t-if="len(invoice_ids_sorted) > 3" class="text-right" style="font-size:11px;">
+                          <p>
+
+                            <!-- payment due date -->
+                            <t t-if='len(invoice_ids_sorted) == 4 and archived[0].date_due'>
+                              <strong>Paid on</strong>
+                              <br/>
+                              <strong>
+                                <span t-field="archived[0].date_due"
+                                  t-options='{"format": "dd-MM-YYYY"}'/>
+                              </strong>
+                              <br/>
+                            </t>
+
+                            <u>
+                              <strong>
+                                <span style="font-size:13px; background-color: #98fb98;"
+                                      t-esc="'{0:,.2f}'.format(float(archived_amount_total))"
+                                      t-options='{"widget": "False"}'/>
+                            </strong>
+                            </u>
+
+                            <!-- payment method -->
+                              <t t-if="len(invoice_ids_sorted) == 4 and archived[0].x_account_payment_method">
+                                <br/>
+                                (<span t-field="archived[0].x_account_payment_method"/>)
+                              </t>
+
+                          </p>
+                        </td>
+
+                        <!-- PAYMENT ROW -->
+                        <t t-foreach="invoices_show" t-as="invoice_id">
+                          <td class="text-right" style="font-size:11px;">
+                                <p>
+                                  <!-- payment due date -->
+                                  <t t-if='invoice_id.date'>
+                                    <strong>Paid on</strong>
+                                    <br/>
+                                    <strong>
+                                      <span t-field="invoice_id.date"
+                                        t-options='{"format": "dd-MM-YYYY"}'/>
+                                    </strong>
+                                    <br/>
+                                  </t>
+
+                                  <u>
+                                    <strong>
+                                      <span style="font-size:13px; background-color: #98fb98;"
+                                            t-esc="'{0:,.2f}'.format(float(invoice_id.amount_total))"
+                                            t-options='{"widget": "False"}'/>
+                                  </strong>
+                                  </u>
+                                </p>
+                          </td>
+                        </t>
+
+                        <th class="text-right"><strong></strong></th>
+                        <th class="text-right"><strong></strong></th>
+                        </tr>
+                                <span t-field="archived[0].date"
+                                  t-options='{"format": "dd-MM-YYYY"}'/>
+                              </strong>
+                              <br/>
+                            </t>
+
+                            <u>
+                              <strong>
+                                <span style="font-size:13px; background-color: #98fb98;"
+                                      t-esc="'{0:,.2f}'.format(float(archived_amount_total))"
+                                      t-options='{"widget": "False"}'/>
+                            </strong>
+                            </u>
+                          </p>
+                        </td>
+                        <!-- payment row -->
+                        <t t-foreach="invoices_show" t-as="invoice_id">
+                          <td class="text-right" style="font-size:11px;">
+                                <p>
+                                  <!-- payment due date -->
+                                  <t t-if='invoice_id.date'>
+                                    <strong>Paid on</strong>
+                                    <br/>
+                                    <strong>
+                                      <span t-field="invoice_id.date"
+                                        t-options='{"format": "dd-MM-YYYY"}'/>
+                                    </strong>
+                                    <br/>
+                                  </t>
+
+                                  <u>
+                                    <strong>
+                                      <span style="font-size:13px; background-color: #98fb98;"
+                                            t-esc="'{0:,.2f}'.format(float(invoice_id.amount_total))"
+                                            t-options='{"widget": "False"}'/>
+                                  </strong>
+                                  </u>
+                                </p>
+                          </td>
+                        </t>
+
+                        <th class="text-right"><strong></strong></th>
+                        <th class="text-right"><strong></strong></th>
+                    </tr>
+
+
             </table>
 
             <div class="oe_structure"/>
