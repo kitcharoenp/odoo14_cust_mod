@@ -7,7 +7,6 @@ from datetime import datetime
 
 from odoo import api, fields, models, _
 from odoo.tools import DEFAULT_SERVER_DATETIME_FORMAT
-import odoo.addons.decimal_precision as dp
 from odoo.exceptions import UserError
 
 
@@ -103,8 +102,9 @@ class TelcoPurchaseAdvancePayment(models.TransientModel):
     # This function is not on odoo10
     def _prepare_invoice_values(self, order, name, amount, po_line):
         invoice_vals = {
-            'ref': order.client_order_ref,
-            'move_type': 'out_invoice',
+            # TODO: see `_prepare_invoice(self)` in purchase`
+            'ref': order.partner_ref or '',  # can addition other ref
+            'move_type': 'in_invoice',
             'invoice_origin': order.name,
             'invoice_user_id': order.user_id.id,
             'narration': order.note,
@@ -112,21 +112,20 @@ class TelcoPurchaseAdvancePayment(models.TransientModel):
             'fiscal_position_id': (order.fiscal_position_id or order.fiscal_position_id.get_fiscal_position(order.partner_id.id)).id,
             'partner_shipping_id': order.partner_shipping_id.id,
             'currency_id': order.pricelist_id.currency_id.id,
-            'payment_reference': order.reference,
+            # 'payment_reference': order.reference,
             'invoice_payment_term_id': order.payment_term_id.id,
             'partner_bank_id': order.company_id.partner_id.bank_ids[:1].id,
-            'team_id': order.team_id.id,
-            'campaign_id': order.campaign_id.id,
-            'medium_id': order.medium_id.id,
-            'source_id': order.source_id.id,
+
+            # TODO: add addition field
+
             'invoice_line_ids': [(0, 0, {
                 'name': name,
                 'price_unit': amount,
                 'quantity': 1.0,
+                'purchase_line_id': po_line.id,
                 'product_id': self.product_id.id,
                 'product_uom_id': po_line.product_uom.id,
                 'tax_ids': [(6, 0, po_line.tax_id.ids)],
-                'sale_line_ids': [(6, 0, [po_line.id])],
                 'analytic_tag_ids': [(6, 0, po_line.analytic_tag_ids.ids)],
                 'analytic_account_id': order.analytic_account_id.id or False,
             })],
@@ -135,77 +134,27 @@ class TelcoPurchaseAdvancePayment(models.TransientModel):
         return invoice_vals
 
     def _create_invoice(self, order, po_line, amount):
-        inv_obj = self.env['account.invoice']
-        ir_property_obj = self.env['ir.property']
+        if (self.advance_payment_method == 'percentage'
+                and self.amount <= 0.00) or (
+                self.advance_payment_method == 'fixed'
+                and self.fixed_amount <= 0.00):
+            raise UserError(_(
+                'The value of the down payment amount must be positive.'))
 
-        # Evaluate Expense Account
-        account_id = False
-        if self.product_id.id:
-            account_id = self.product_id.property_account_expense_id.id
-        if not account_id:
-            expense_account = ir_property_obj.get(
-                'property_account_expense_categ_id',
-                'product.category')
-            account_id = order.fiscal_position_id.map_account(expense_account).id if expense_account else False
-        if not account_id:
-            raise UserError(
-                _('There is no income account defined for this product: "%s". \
-                You may have to install a chart of account from \
-                Accounting app, settings menu.') %
-                (self.product_id.name,))
+        amount, name = self._get_advance_details(order)
 
-        # Evaluate amount
-        if self.amount <= 0.00:
-            raise UserError(_('The value of the down payment \
-                amount must be positive.'))
-        if self.advance_payment_method == 'percentage':
-            amount = order.amount_untaxed * self.amount / 100
-            name = _("Down payment of %s%%") % (self.amount,)
-        else:
-            amount = self.amount
-            name = _('Down Payment')
+        invoice_vals = self._prepare_invoice_values(
+            order, name, amount, po_line)
 
-        # Evaluate tax
-        taxes = self.product_id.taxes_id.filtered(
-            lambda r: not order.company_id or r.company_id == order.company_id)
-        if order.fiscal_position_id and taxes:
-            tax_ids = order.fiscal_position_id.map_tax(taxes).ids
-        else:
-            tax_ids = taxes.ids_prepare_invoice_values
+        if order.fiscal_position_id:
+            invoice_vals['fiscal_position_id'] = order.fiscal_position_id.id
 
-        # todo : validate invoice parameter
-        invoice = inv_obj.create({
-            'name': order.name,
-            'origin': order.name,
-            'type': 'in_invoice',
-            'reference': False,
-            'account_id': order.partner_id.property_account_payable_id.id,
-            'partner_id': order.partner_id.id,
-            # 'partner_shipping_id': order.partner_shipping_id.id, Delivery Address
-            'invoice_line_ids': [(0, 0, {
-                'name': name,
-                'origin': order.name,
-                'account_id': account_id,
-                'price_unit': amount,
-                'quantity': 1.0,
-                'discount': 0.0,
-                'uom_id': self.product_id.uom_id.id,
-                'product_id': self.product_id.id,
-                'purchase_line_id': po_line.id,
-                'invoice_line_tax_ids': [(6, 0, tax_ids)],
-            })],
-            'currency_id': order.currency_id.id,
-            'payment_term_id': order.payment_term_id.id,
-            'fiscal_position_id': order.fiscal_position_id.id or \
-            order.partner_id.property_account_position_id.id,
-            'comment': order.notes,
-        })
-
-        invoice.compute_taxes()
+        invoice = self.env['account.move'].sudo().create(
+            invoice_vals).with_user(self.env.uid)
         invoice.message_post_with_view(
-                    'mail.message_origin_link',
-                    values={'self': invoice, 'origin': order},
-                    subtype_id=self.env.ref('mail.mt_note').id)
+            'mail.message_origin_link',
+            values={'self': invoice, 'origin': order},
+            subtype_id=self.env.ref('mail.mt_note').id)
         return invoice
 
     def _get_advance_details(self, order):
@@ -235,6 +184,8 @@ class TelcoPurchaseAdvancePayment(models.TransientModel):
             # 'is_downpayment': True,
             'sequence': order.order_line and order.order_line[
                 -1].sequence + 1 or 10,
+            'date_planned': datetime.today().strftime(
+                DEFAULT_SERVER_DATETIME_FORMAT),
         }
         del context
         return po_line_values
@@ -243,7 +194,9 @@ class TelcoPurchaseAdvancePayment(models.TransientModel):
         purchase_orders = self.env['purchase.order'].browse(
             self._context.get('active_ids', []))
 
-        # TODO:  `deduct_down_payments is missing, create its`
+        # TODO:  `deduct_down_payments is missing, create its` and validate
+        # '_create_invoices' in `sale` module
+
         if self.advance_payment_method == 'delivered':
             purchase_orders._create_invoices(final=self.deduct_down_payments)
         else:
@@ -283,19 +236,6 @@ class TelcoPurchaseAdvancePayment(models.TransientModel):
                     self.product_id,
                     # Maybe need to fix sale is `partner_shipping_id`
                     order.partner_id).ids
-
-                # prepare po_line for deposit product
-                po_line = purchase_line_obj.create({
-                    'name': name,
-                    'price_unit': amount,
-                    'product_qty': 0.0,
-                    'order_id': order.id,
-                    'product_uom': self.product_id.uom_id.id,
-                    'product_id': self.product_id.id,
-                    'taxes_id': [(6, 0, tax_ids)],
-                    'date_planned': datetime.today().strftime(
-                                        DEFAULT_SERVER_DATETIME_FORMAT),
-                })
 
                 po_line_values = self._prepare_po_line(
                     order, analytic_tag_ids, tax_ids, amount, name)
