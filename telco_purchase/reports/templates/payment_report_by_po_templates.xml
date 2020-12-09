@@ -1,6 +1,7 @@
 <?xml version="1.0" encoding="utf-8"?>
 <odoo>
 
+  <!-- see tax in odoo14/addons/account/views/report_invoice.xml -->
 <template id="payment_report_by_po_document">
   <t t-call="web.external_layout">
       <t t-set="o" t-value="o.with_context(lang=o.partner_id.lang)"/>
@@ -607,23 +608,7 @@
                     </t>
 
                 </tbody>
-<!--
-                <t t-set="account_invoice_taxs" t-value="[]"/>
-                <t t-foreach="invoices_show" t-as="invoice_id">
-                  <t t-foreach="invoice_id.tax_line_ids" t-as="tax_line_id">
-                    <t t-set="account_invoice_taxs" t-value="account_invoice_taxs + [tax_line_id]"/>
-                  </t>
-                </t>
 
-                <t t-set="account_taxs" t-value="[]"/>
-                <t t-foreach="account_invoice_taxs" t-as="account_invoice_tax">
-                    <t t-if="account_invoice_tax.tax_id not in account_taxs">
-                      <t t-set="account_taxs" t-value="account_taxs + [account_invoice_tax.tax_id]"/>
-                  </t>
-                </t>
--->
-                <!-- table foot
-                <tfoot> -->
 
                 <!-- Sum (Untaxed) -->
                   <tr style="background-color: #a6a6a6;">
@@ -676,7 +661,47 @@
                       </th>
                   </tr>
 
-                <!-- Payment -->
+                  <!-- Taxs -->
+                  <tr>
+                    <th colspan="2"><strong>Tax</strong></th>
+                    <th class="text-right"><strong></strong></th>
+
+                      <!-- Taxs ROW -->
+                      <t t-foreach="invoices_show" t-as="invoice_id">
+                        <td style="font-size:11px;">
+                          <p>
+                            <t t-foreach="invoice_id.amount_by_group" t-as="amount_by_group">
+                              <t t-if="len(invoice_id.line_ids.filtered(lambda line: line.tax_line_id)) in [0, 1] and invoice_id.amount_untaxed == amount_by_group[2]">
+                                <strong><span class="text-nowrap" style="float:left;" t-esc="amount_by_group[0]"/></strong>
+                                <span class="text-nowrap" style="float:right;" t-esc="amount_by_group[3]"/>
+                                <br/>
+                              </t>
+                              <t t-else="">
+
+                                  <strong><span class="text-nowrap" style="float:left;" t-esc="amount_by_group[0]"/> </strong>
+                                  <span class="text-nowrap"> on
+                                    <t t-esc="amount_by_group[4]"/>
+                                  </span>
+
+
+                                  <u>
+                                    <strong>
+                                      <span class="text-nowrap" style="float:right;" t-esc="amount_by_group[3]"/>
+                                    </strong>
+                                  </u>
+                                  <br/>
+                              </t>
+                            </t>
+
+                          </p>
+                        </td>
+                      </t>
+
+                      <th class="text-right"><strong></strong></th>
+                      <th class="text-right"><strong></strong></th>
+                    </tr>
+
+                  <!-- Payment -->
                   <tr style="background-color: #98fb98;">
                       <th colspan="2"><strong>Payment</strong></th>
                       <th class="text-right"><strong></strong></th>
@@ -689,7 +714,7 @@
                             t-value="archived_amount_total + invoice_id.amount_total" />
                       </t>
 
-                      <!-- invoice moere than 3 items-->
+                      <!-- PAYMENT ROW more than 3 items-->
                       <td t-if="len(invoice_ids_sorted) > 3" class="text-right" style="font-size:11px;">
                         <p>
 
