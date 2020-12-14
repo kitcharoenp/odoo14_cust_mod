@@ -3,13 +3,16 @@
 
   <!-- see tax in odoo14/addons/account/views/report_invoice.xml -->
 <template id="payment_report_by_po_document">
-  <t t-call="web.external_layout">
+
+  <t t-call="web.external_layout_background">
       <t t-set="o" t-value="o.with_context(lang=o.partner_id.lang)"/>
+
       <t t-set="address">
           <div t-field="o.partner_id"
           t-options='{"widget": "contact", "fields": ["address", "name", "phone"], "no_marker": True, "phone_icons": True}'/>
           <p t-if="o.partner_id.vat"><t t-esc="o.company_id.country_id.vat_label or 'Tax ID'"/>: <span t-field="o.partner_id.vat"/></p>
       </t>
+
       <t t-if="o.dest_address_id">
           <t t-set="information_block">
               <strong>Shipping address:</strong>
@@ -48,17 +51,33 @@
                   <td colspan="3"><span t-field="o.x_account_analytic_id.name"/></td>
                 </tr>
                 <tr>
-                  <th class="col-xs-2" style="background-color: #DEDEDE;"><strong>PO ref.</strong></th>
+                  <th class="col-xs-2" style="background-color: #DEDEDE;"><strong>Service Reference</strong></th>
                   <td class="col-xs-4"><span t-field="o.x_other_ref"/></td>
-                  <th class="col-xs-2" style="background-color: #DEDEDE;"><strong>Order date</strong></th>
+                  <th class="col-xs-2" style="background-color: #DEDEDE;"><strong>Sap Network</strong></th>
                   <td class="col-xs-4"><span t-field="o.date_order" t-options='{"format": "dd-MM-YYYY"}'/></td>
                 </tr>
                 <tr>
-                  <th class="col-xs-2" style="background-color: #DEDEDE;"><strong>Vendor</strong></th>
+                  <th class="col-xs-2" style="background-color: #DEDEDE;"><strong>Source Document</strong></th>
+                  <td class="col-xs-4"><span t-field="o.x_other_ref"/></td>
+                  <th class="col-xs-2" style="background-color: #DEDEDE;"><strong>Vendor Reference</strong></th>
+                  <td class="col-xs-4"><span t-field="o.date_order" t-options='{"format": "dd-MM-YYYY"}'/></td>
+                </tr>
+
+                <tr>
+                  <th class="col-xs-2" style="background-color: #DEDEDE;"><strong>PO ref.</strong></th>
+                  <td class="col-xs-4"><span t-field="o.x_other_ref"/></td><th class="col-xs-2" style="background-color: #DEDEDE;"><strong>Vendor</strong></th>
                   <td class="col-xs-4"><span t-field="o.partner_id.name"/></td>
+                  <th class="col-xs-2" style="background-color: #DEDEDE;"><strong>Order date</strong></th>
+                  <td class="col-xs-4"><span t-field="o.date_order" t-options='{"format": "dd-MM-YYYY"}'/></td>
+                </tr>
+
+                <tr>
                   <th class="col-xs-2" style="background-color: #DEDEDE;"><strong>Requestor</strong></th>
                   <td class="col-xs-4"><span t-field="o.x_requestor_id.name"/></td>
+                  <th class="col-xs-2" style="background-color: #DEDEDE;"><strong>Vendor</strong></th>
+                  <td class="col-xs-4"><span t-field="o.partner_id.name"/></td>
                 </tr>
+
                 <tr>
                   <th class="col-xs-2"><strong>Route</strong></th>
                   <td colspan="3"><span t-field="o.x_description"/></td>
@@ -776,17 +795,82 @@
 
             <div class="oe_structure"/>
         </div>
+
+        <div t-attf-class="footer">
+
+              <!-- Signature -->
+              <div class="row">
+                <!-- prepare employee -->
+                  <div class="col-3 text-center" >
+                      <ul style="list-style-type: none; font-size:11px;">
+
+                          <li><br/><br/><br/></li>
+                          <li>________________</li>
+                          <li><span t-esc="datetime.datetime.now().strftime('%d / %m / %Y')"/></li>
+                          <li><span t-field="user.employee_ids[0].name"/></li>
+                          <li><span t-field="user.employee_ids[0].job_id.name"/></li>
+                      </ul>
+                  </div>
+                  <!-- department manager -->
+                  <div class="col-3 text-center" >
+                      <ul style="list-style-type: none; font-size:11px;">
+
+                          <li><br/><br/><br/></li>
+                          <li>________________</li>
+                          <li>______/_____/_____</li>
+                      </ul>
+                  </div>
+                  <!-- company accounting director -->
+                  <div class="col-3 text-center" >
+                      <ul style="list-style-type: none; font-size:11px;">
+
+                          <li><br/><br/><br/></li>
+                          <li>________________</li>
+                          <li>______/_____/_____</li>
+
+                      </ul>
+                  </div>
+                  <!-- company managing director -->
+                  <div class="col-3 text-center" >
+                      <ul style="list-style-type: none; font-size:11px;">
+
+                          <li><br/><br/><br/></li>
+                          <li>________________</li>
+                          <li>______/_____/_____</li>
+
+                      </ul>
+                  </div>
+              </div><!-- /.row -->
+
+
+
+        </div>
     </t>
 </template>
 
 <template id="payment_report_by_po_templates">
-    <t t-call="web.html_container">
-        <t t-foreach="docs" t-as="o">
-            <t  t-call="telco_purchase.payment_report_by_po_document"
-                t-lang="o.partner_id.lang"
-            />
+  <t t-call="web.html_container">
+    <t t-foreach="docs" t-as="o">
+      <t t-if="not o" t-set="o" t-value="doc"/>
+
+      <t t-if="not company">
+        <!-- Multicompany -->
+        <t t-if="company_id">
+          <t t-set="company" t-value="company_id"/>
         </t>
+        <t t-elif="o and 'company_id' in o">
+          <t t-set="company" t-value="o.company_id.sudo()"/>
+        </t>
+        <t t-else="else">
+          <t t-set="company" t-value="res_company"/>
+        </t>
+      </t>
+
+      <t  t-call="telco_purchase.payment_report_by_po_document"
+        t-lang="o.partner_id.lang"
+        />
+      </t>
     </t>
-</template>
+  </template>
 
 </odoo>
