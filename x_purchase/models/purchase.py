@@ -12,28 +12,21 @@ class PurchaseOrder(models.Model):
     x_account_analytic_id = fields.Many2one(
         'account.analytic.account',
         string='Analytic Account')
+
+    x_service_ref1 = fields.Char(string='Service Ref.1')
+    x_service_ref2 = fields.Char(string='Service Ref.2')
+    x_sap_network = fields.Char(string='Sap Network')
+
+    x_requestor_id = fields.Many2one(
+        'hr.employee',
+        string="Requestor")
     x_manager_id = fields.Many2one(
         'hr.employee',
         string="Manager")
     x_verified_id = fields.Many2one(
         'hr.employee',
         string="Verified By")
-    x_requestor_id = fields.Many2one(
-        'hr.employee',
-        string="Requestor")
-    x_other_ref = fields.Char(string='External PO Ref')
-
-    x_invoice_receipt_date = fields.Datetime(
-        string='Invoice Receipt',
-        default=fields.Datetime.now)
-    x_invoice_receipt_by = fields.Many2one(
-        'hr.employee',
-        string="Receipt By",)
     x_description = fields.Text(string='Description')
-
-    x_service_order = fields.Char(string='Service Order')
-    x_circuit_id = fields.Char(string='Circuit Id')
-    x_sap_network = fields.Char(string='Sap Network')
 
     @api.depends('name', 'partner_ref')
     def name_get(self):

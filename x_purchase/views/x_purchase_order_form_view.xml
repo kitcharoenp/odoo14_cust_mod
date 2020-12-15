@@ -1,8 +1,8 @@
 <?xml version="1.0" encoding="UTF-8"?>
 <odoo>
 
-  <record id="telco_purchase_order_form_view" model="ir.ui.view">
-      <field name="name">telco purchase order form</field>
+  <record id="x_purchase_order_form_view" model="ir.ui.view">
+      <field name="name">x purchase order form</field>
       <field name="model">purchase.order</field>
       <field name="inherit_id"
           ref="purchase.purchase_order_form"/>
@@ -76,20 +76,16 @@
               <group>
                 <field name="partner_ref"/>
                 <field name="origin"/>
-                <field name="x_service_order"/>
-                <field name="x_circuit_id"/>
+                <field name="x_service_ref1"/>
+                <field name="x_service_ref2"/>
                 <field name="x_sap_network"/>
               </group>
               <group>
-                <field name="x_invoice_receipt_by"
-                  options="{'no_create': True}"/>
-                <field name="x_invoice_receipt_date"
-                  string="Receipt Date"/>
-                <field name="x_manager_id"
+                <field name="x_requestor_id"
                   options="{'no_create': True}"/>
                 <field name="x_verified_id"
                     options="{'no_create': True}"/>
-                <field name="x_requestor_id"
+                <field name="x_manager_id"
                   options="{'no_create': True}"/>
               </group>
               <group colspan="2">
