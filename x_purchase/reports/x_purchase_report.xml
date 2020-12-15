@@ -6,8 +6,8 @@
 -->
 
     <!-- paper format -->
-    <record id="paperformat_telco_purchase_summary" model="report.paperformat">
-      <field name="name">Telco Purchase Summary</field>
+    <record id="paperformat_x_purchase_summary" model="report.paperformat">
+      <field name="name">x Purchase Summary</field>
       <field name="default" eval="True" />
       <field name="format">A4</field>
       <field name="orientation">Portrait</field>
@@ -19,12 +19,12 @@
       <field name="dpi">90</field>
     </record>
 
-    <record id="action_report_telco_purchase_summary" model="ir.actions.report">
+    <record id="action_report_x_purchase_summary" model="ir.actions.report">
       <field name="name">Payment Summary</field>
       <field name="model">purchase.order</field>
       <field name="report_type">qweb-html</field>
-      <field name="report_name">telco_purchase.payment_report_by_po_templates</field>
-      <field name="report_file">telco_purchase.payment_report_by_po_templates</field>
+      <field name="report_name">x_purchase.payment_report_by_po_templates</field>
+      <field name="report_file">x_purchase.payment_report_by_po_templates</field>
       <field name="binding_model_id" ref="model_purchase_order"/>
       <field name="binding_type">report</field>
     </record>

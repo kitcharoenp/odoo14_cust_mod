@@ -51,24 +51,16 @@
                   <td colspan="3"><span t-field="o.x_account_analytic_id.name"/></td>
                 </tr>
                 <tr>
-                  <th class="col-xs-2" style="background-color: #DEDEDE;"><strong>Service Reference</strong></th>
-                  <td class="col-xs-4"><span t-field="o.x_other_ref"/></td>
-                  <th class="col-xs-2" style="background-color: #DEDEDE;"><strong>Sap Network</strong></th>
-                  <td class="col-xs-4"><span t-field="o.date_order" t-options='{"format": "dd-MM-YYYY"}'/></td>
+                  <th class="col-xs-2" style="background-color: #DEDEDE;"><strong>Service Ref.1</strong></th>
+                  <td class="col-xs-4"><span t-field="o.x_service_ref1"/></td>
+                  <th class="col-xs-2" style="background-color: #DEDEDE;"><strong>Service Ref.2</strong></th>
+                  <td class="col-xs-4"><span t-field="o.x_service_ref2"/></td>
                 </tr>
                 <tr>
                   <th class="col-xs-2" style="background-color: #DEDEDE;"><strong>Source Document</strong></th>
                   <td class="col-xs-4"><span t-field="o.x_other_ref"/></td>
-                  <th class="col-xs-2" style="background-color: #DEDEDE;"><strong>Vendor Reference</strong></th>
-                  <td class="col-xs-4"><span t-field="o.date_order" t-options='{"format": "dd-MM-YYYY"}'/></td>
-                </tr>
-
-                <tr>
-                  <th class="col-xs-2" style="background-color: #DEDEDE;"><strong>PO ref.</strong></th>
-                  <td class="col-xs-4"><span t-field="o.x_other_ref"/></td><th class="col-xs-2" style="background-color: #DEDEDE;"><strong>Vendor</strong></th>
-                  <td class="col-xs-4"><span t-field="o.partner_id.name"/></td>
-                  <th class="col-xs-2" style="background-color: #DEDEDE;"><strong>Order date</strong></th>
-                  <td class="col-xs-4"><span t-field="o.date_order" t-options='{"format": "dd-MM-YYYY"}'/></td>
+                  <th class="col-xs-2" style="background-color: #DEDEDE;"><strong>Sap Network</strong></th>
+                  <td class="col-xs-4"><span t-field="o.x_sap_network"/></td>
                 </tr>
 
                 <tr>
@@ -79,7 +71,7 @@
                 </tr>
 
                 <tr>
-                  <th class="col-xs-2"><strong>Route</strong></th>
+                  <th class="col-xs-2"><strong>Description</strong></th>
                   <td colspan="3"><span t-field="o.x_description"/></td>
                 </tr>
 
@@ -866,7 +858,7 @@
         </t>
       </t>
 
-      <t  t-call="telco_purchase.payment_report_by_po_document"
+      <t  t-call="x_purchase.payment_report_by_po_document"
         t-lang="o.partner_id.lang"
         />
       </t>
