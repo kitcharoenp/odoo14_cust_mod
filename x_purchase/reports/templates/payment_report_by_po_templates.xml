@@ -58,7 +58,7 @@
                 </tr>
                 <tr>
                   <th class="col-xs-2" style="background-color: #DEDEDE;"><strong>Source Document</strong></th>
-                  <td class="col-xs-4"><span t-field="o.x_other_ref"/></td>
+                  <td class="col-xs-4"><span t-field="o.origin"/></td>
                   <th class="col-xs-2" style="background-color: #DEDEDE;"><strong>Sap Network</strong></th>
                   <td class="col-xs-4"><span t-field="o.x_sap_network"/></td>
                 </tr>
