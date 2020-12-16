@@ -16,6 +16,11 @@
     'depends': ['purchase',
                 'x_account_move'],
     'data': [
+        # Security
+        'security/x_purchase_security_groups.xml',
+        'security/ir.model.access.csv',
+        'security/x_purchase_security_rules.xml',
+        # Data
         'data/x_purchase_sequence_data.xml',
         # Views
         'views/x_purchase_order_tree_view.xml',
@@ -27,9 +32,6 @@
         # Reports and Templates
         'reports/x_purchase_report.xml',
         'reports/templates/payment_report_by_po_templates.xml',
-        # Security
-        'security/x_purchase_security_groups.xml',
-
     ],
     'installable': True,
     'application': True,

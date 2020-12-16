@@ -1,0 +1,25 @@
+<?xml version="1.0" encoding="utf-8"?>
+<odoo>
+  <data>
+    <record id="purchase_order_vendor_rule" model="ir.rule">
+        <field name="name">Vendor Purchase Orders</field>
+        <field name="model_id" ref="purchase.model_purchase_order"/>
+        <field name="domain_force">['|',
+          ('message_partner_ids','child_of',[user.commercial_partner_id.id]),
+          ('partner_id', 'child_of', [user.commercial_partner_id.id])]</field>
+        <field name="groups" eval="[(4, ref('x_purchase.group_purchase_vendor'))]"/>
+        <field name="perm_unlink" eval="0"/>
+        <field name="perm_write" eval="1"/>
+        <field name="perm_read" eval="1"/>
+        <field name="perm_create" eval="0"/>
+    </record>
+    <record id="purchase_order_line_vendor_rule" model="ir.rule">
+        <field name="name">Vendor Purchase Order Lines</field>
+        <field name="model_id" ref="purchase.model_purchase_order_line"/>
+        <field name="domain_force">['|',
+          ('order_id.message_partner_ids','child_of',[user.commercial_partner_id.id]),
+          ('order_id.partner_id','child_of',[user.commercial_partner_id.id])]</field>
+        <field name="groups" eval="[(4, ref('x_purchase.group_purchase_vendor'))]"/>
+    </record>
+  </data>
+</odoo>
