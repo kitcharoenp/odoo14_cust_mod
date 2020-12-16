@@ -27,6 +27,9 @@
         # Reports and Templates
         'reports/x_purchase_report.xml',
         'reports/templates/payment_report_by_po_templates.xml',
+        # Security
+        'security/x_purchase_security_groups.xml',
+
     ],
     'installable': True,
     'application': True,
