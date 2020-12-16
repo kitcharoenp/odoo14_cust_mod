@@ -114,7 +114,7 @@
                           </strong>
                           <br/>
                             <t t-if="len(invoice_ids_sorted) == 4 and  archived[0].invoice_date">
-                              <strong>b@<span t-field="archived[0].invoice_date"/></strong> <br/>
+                              <strong>b@<span t-field="archived[0].invoice_date" t-options='{"format": "dd-MM-YYYY"}'/></strong> <br/>
                             </t>
                             <t t-if="len(invoice_ids_sorted) == 4 and  archived[0].ref">
                               <strong><span t-field="archived[0].ref"/></strong><br/>
@@ -128,22 +128,14 @@
                               #<span t-esc="lot"/>
                             </strong>
                               <br/>
-                            <!--
-                              <t t-if="invoice_id.number">
-                                <u t-field="invoice_id.number"/><br/>
-                              </t>
-                            -->
+
                               <t t-if="invoice_id.invoice_date">
-                                <strong>b@<span t-field="invoice_id.invoice_date"/></strong> <br/>
+                                <strong>b@<span t-field="invoice_id.invoice_date" t-options='{"format": "dd-MM-YYYY"}'/></strong> <br/>
                               </t>
                               <t t-if="invoice_id.ref">
                                 <strong><span t-field="invoice_id.ref"/></strong><br/>
                               </t>
-                              <!--
-                              <t t-if="invoice_id.date_due">
-                                p@<u t-field="invoice_id.date_due"/><br/>
-                              </t>
-                              -->
+
 
                           </th>
                         </t>
