@@ -2,8 +2,8 @@
 <odoo>
 
     <!-- append x_description field after state field in account invoice tree -->
-    <record id="telco_account_move_tree_view" model="ir.ui.view">
-        <field name="name">TelcoAccountMoveTreeView</field>
+    <record id="x_account_move_tree_view" model="ir.ui.view">
+        <field name="name">xAccountMoveTreeView</field>
         <field name="model">account.move</field>
         <field name="inherit_id"
             ref="account.view_invoice_tree"/>

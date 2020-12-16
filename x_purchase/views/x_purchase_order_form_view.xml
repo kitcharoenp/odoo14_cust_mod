@@ -71,7 +71,7 @@
 
         <!-- append Telco to Product tab -->
         <xpath expr="//form/sheet/notebook/page[1]" position="after">
-          <page string="Telco">
+          <page string="Addition Information">
             <group>
               <group>
                 <field name="partner_ref"/>
