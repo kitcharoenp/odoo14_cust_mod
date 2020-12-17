@@ -13,18 +13,10 @@
           <p t-if="o.partner_id.vat"><t t-esc="o.company_id.country_id.vat_label or 'Tax ID'"/>: <span t-field="o.partner_id.vat"/></p>
       </t>
 
-      <t t-if="o.dest_address_id">
-          <t t-set="information_block">
-              <strong>Shipping address:</strong>
-              <div t-if="o.dest_address_id">
-                  <div t-field="o.dest_address_id"
-                      t-options='{"widget": "contact", "fields": ["address", "name", "phone"], "no_marker": True, "phone_icons": True}' name="purchase_shipping_address"/>
-              </div>
-
-          </t>
-      </t>
-
         <div class="page">
+          <h2>
+            <span>Payment Summary</span>
+          </h2>
           <!-- include CSS  -->
           <style>
               /* --- Generic Restyling and Resets --- */
@@ -62,14 +54,6 @@
                   <th class="col-xs-2" style="background-color: #DEDEDE;"><strong>Sap Network</strong></th>
                   <td class="col-xs-4"><span t-field="o.x_sap_network"/></td>
                 </tr>
-
-                <tr>
-                  <th class="col-xs-2" style="background-color: #DEDEDE;"><strong>Requestor</strong></th>
-                  <td class="col-xs-4"><span t-field="o.x_requestor_id.name"/></td>
-                  <th class="col-xs-2" style="background-color: #DEDEDE;"><strong>Vendor</strong></th>
-                  <td class="col-xs-4"><span t-field="o.partner_id.name"/></td>
-                </tr>
-
                 <tr>
                   <th class="col-xs-2"><strong>Description</strong></th>
                   <td colspan="3"><span t-field="o.x_description"/></td>
@@ -791,8 +775,8 @@
                           <li><br/><br/><br/></li>
                           <li>________________</li>
                           <li><span t-esc="datetime.datetime.now().strftime('%d / %m / %Y')"/></li>
-                          <li><span t-field="user.employee_ids[0].name"/></li>
-                          <li><span t-field="user.employee_ids[0].job_id.name"/></li>
+                          <li t-if="o.user_id"><span t-field="o.user_id.name"/></li>
+                          <li t-if="o.partner_id"><span t-field="o.partner_id.name"/></li>
                       </ul>
                   </div>
                   <!-- department manager -->
@@ -802,6 +786,8 @@
                           <li><br/><br/><br/></li>
                           <li>________________</li>
                           <li>______/_____/_____</li>
+                          <li t-if="o.x_requestor_id"><span t-field="o.x_requestor_id.name"/></li>
+                          <li t-if="o.x_requestor_id"><span t-field="o.x_requestor_id.job_id.name"/></li>
                       </ul>
                   </div>
                   <!-- company accounting director -->
@@ -811,6 +797,8 @@
                           <li><br/><br/><br/></li>
                           <li>________________</li>
                           <li>______/_____/_____</li>
+                          <li t-if="o.x_verified_id"><span t-field="o.x_verified_id.name"/></li>
+                          <li t-if="o.x_verified_id"><span t-field="o.x_verified_id.job_id.name"/></li>
 
                       </ul>
                   </div>
@@ -821,6 +809,8 @@
                           <li><br/><br/><br/></li>
                           <li>________________</li>
                           <li>______/_____/_____</li>
+                          <li t-if="o.x_manager_id"><span t-field="o.x_manager_id.name"/></li>
+                          <li t-if="o.x_manager_id"><span t-field="o.x_manager_id.job_id.name"/></li>
 
                       </ul>
                   </div>
