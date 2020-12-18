@@ -785,9 +785,9 @@
               <div class="row">
                 <!-- prepare employee -->
                   <div class="col-3 text-center" >
-                      <ul style="list-style-type: none; font-size:11px;">
-
-                          <li><br/><br/><br/></li>
+                      <ul style="list-style-type: none; font-size:12px;">
+                          <li>เจ้าหน้าที่ผู้ได้รับมอบอำนาจจากผู้รับจ้าง</li>
+                          <li><br/><br/></li>
                           <li>________________</li>
                           <li><span t-esc="datetime.datetime.now().strftime('%d / %m / %Y')"/></li>
                           <li t-if="o.user_id"><span t-field="o.user_id.name"/></li>
@@ -796,8 +796,8 @@
                   </div>
                   <!-- department manager -->
                   <div class="col-3 text-center" >
-                      <ul style="list-style-type: none; font-size:11px;">
-
+                      <ul style="list-style-type: none; font-size:12px;">
+                          <li>ผู้แทนผู้ควบคุมงาน</li>
                           <li><br/><br/><br/></li>
                           <li>________________</li>
                           <li>______/_____/_____</li>
@@ -807,8 +807,8 @@
                   </div>
                   <!-- company accounting director -->
                   <div class="col-3 text-center" >
-                      <ul style="list-style-type: none; font-size:11px;">
-
+                      <ul style="list-style-type: none; font-size:12px;">
+                          <li>วิศวกรผู้ควบคุมงาน</li>
                           <li><br/><br/><br/></li>
                           <li>________________</li>
                           <li>______/_____/_____</li>
@@ -819,8 +819,8 @@
                   </div>
                   <!-- company managing director -->
                   <div class="col-3 text-center" >
-                      <ul style="list-style-type: none; font-size:11px;">
-
+                      <ul style="list-style-type: none; font-size:12px;">
+                          <li>ผู้จัดการโครงการ</li>
                           <li><br/><br/><br/></li>
                           <li>________________</li>
                           <li>______/_____/_____</li>
