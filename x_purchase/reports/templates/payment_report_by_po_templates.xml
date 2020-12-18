@@ -88,8 +88,10 @@
                 <thead>
                     <tr class="text-center" style="background-color: #a6a6a6;">
                         <th class="text-left"><strong>No.</strong></th>
-                        <th class="text-center col-xs-6"><strong>Description</strong></th>
-                        <th class="text-center"><strong>Amount</strong></th>
+                        <th class="text-center col-xs-4"><strong>Description</strong></th>
+                        <th class="text-center" style="font-size: 9px;"><strong>Unit Price</strong></th>
+                        <th class="text-center" style="font-size: 9px;"><strong>Quantity</strong></th>
+                        <th class="text-center" style="font-size: 9px;"><strong>Subtotal</strong></th>
 
                         <!-- list invoices related to this purchase order  -->
                         <th t-if="len(invoice_ids_sorted) > 3" class="text-center" style="font-size: 9px;">
@@ -147,8 +149,14 @@
                         <td class="text-left">
                             <span t-esc="no"/>.
                         </td>
-                        <td class="text-left col-xs-6" style="font-size: 12px;">
+                        <td class="text-left col-xs-4" style="font-size: 12px;">
                             <span t-field="line.name"/>
+                        </td>
+                        <td class="text-left" style="font-size: 12px;">
+                            <span t-field="line.product_qty"/>
+                        </td>
+                        <td class="text-left" style="font-size: 12px;">
+                            <span t-field="line.price_unit"/>
                         </td>
                         <td class="text-right" style="background-color: #DEDEDE;">
                           <span
@@ -353,9 +361,16 @@
                               <td class="text-left">
                                   <span t-esc="seq1"/>.
                               </td>
-                              <td class="text-left col-xs-6" style="font-size: 12px;">
+                              <td class="text-left col-xs-4" style="font-size: 12px;">
                                   <span t-field="line.name"/>
                               </td>
+                              <td class="text-right" style="font-size: 12px;">
+                                  <span t-field="line.product_qty"/>
+                              </td>
+                              <td class="text-right" style="font-size: 12px;">
+                                  <span t-field="line.price_unit"/>
+                              </td>
+
                               <td class="text-right" style="background-color: #DEDEDE;">
                                 <span
                                     t-esc="'{0:,.2f}'.format(float(line.price_subtotal))"
@@ -599,7 +614,7 @@
 
                 <!-- Sum (Untaxed) -->
                   <tr style="background-color: #a6a6a6;">
-                      <th colspan="2"><strong>Sum (Untaxed)</strong></th>
+                      <th colspan="4"><strong>Sum (Untaxed)</strong></th>
                       <th class="text-right">
                         <strong><u>
                           <span
@@ -650,7 +665,7 @@
 
                   <!-- Taxs -->
                   <tr>
-                    <th colspan="2"><strong>Tax</strong></th>
+                    <th colspan="4"><strong>Tax</strong></th>
                     <th class="text-right"><strong></strong></th>
 
                       <!-- Taxs ROW -->
@@ -690,7 +705,7 @@
 
                   <!-- Payment -->
                   <tr style="background-color: #98fb98;">
-                      <th colspan="2"><strong>Payment</strong></th>
+                      <th colspan="4"><strong>Payment</strong></th>
                       <th class="text-right"><strong></strong></th>
 
                       <t t-set="archived_amount_total" t-value="0" />
