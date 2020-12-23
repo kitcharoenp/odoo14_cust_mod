@@ -51,7 +51,7 @@
         <!-- replace date order  by project  -->
         <xpath expr="//field[@name='date_order']"
             position="replace">
-            <field name="x_account_analytic_id"
+            <field name="x_project_id"
               string="Project"
               options="{'no_create': True}"/>
         </xpath>

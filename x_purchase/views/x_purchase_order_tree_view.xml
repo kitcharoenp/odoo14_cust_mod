@@ -26,10 +26,10 @@
               <attribute name="optional">hide</attribute>
         </xpath>
 
-        <!-- show x_account_analytic_id after   partner_id-->
+        <!-- show x_project_id after   partner_id-->
         <xpath expr="//field[@name='partner_id']"
           position="after">
-          <field name="x_account_analytic_id"
+          <field name="x_project_id"
               options="{'no_create': True}"/>
           <field name="x_sap_network"/>
         </xpath>

@@ -14,6 +14,7 @@
         2. default purchase tax button for purchase order
     """,
     'depends': ['purchase',
+                'project',
                 'x_account_move'],
     'data': [
         # Security

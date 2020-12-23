@@ -9,9 +9,9 @@ from odoo import api, fields, models
 class PurchaseOrder(models.Model):
     _inherit = "purchase.order"
 
-    x_account_analytic_id = fields.Many2one(
-        'account.analytic.account',
-        string='Analytic Account')
+    x_project_id = fields.Many2one(
+        'project.project',
+        string='Project')
 
     x_service_ref1 = fields.Char(string='Service Ref.1')
     x_service_ref2 = fields.Char(string='Service Ref.2')

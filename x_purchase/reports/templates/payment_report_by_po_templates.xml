@@ -40,7 +40,7 @@
               <table class="table table-bordered" style="table-layout:auto">
                 <tr>
                   <th class="col-xs-2"><strong>Project</strong></th>
-                  <td colspan="3"><span t-field="o.x_account_analytic_id.name"/></td>
+                  <td colspan="3"><span t-field="o.x_project_id.name"/></td>
                 </tr>
                 <tr>
                   <th class="col-xs-2" style="background-color: #DEDEDE;"><strong>Service Ref.1</strong></th>
