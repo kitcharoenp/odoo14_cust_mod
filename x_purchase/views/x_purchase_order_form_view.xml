@@ -25,7 +25,7 @@
             <field name="partner_id"
               widget="res_partner_many2one"
               context="{'res_partner_search_mode': 'supplier', 'show_vat': True}"
-              placeholder="Name, TIN, Email, or Reference"/>
+              placeholder="Name, TIN, Email, or Reference" readonly="1"/>
         </xpath>
 
         <!-- overide product_id in Products tab -->
