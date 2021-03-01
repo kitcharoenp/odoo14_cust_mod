@@ -33,7 +33,8 @@
         # Reports and Templates
         'reports/x_purchase_report.xml',
         'reports/templates/payment_report_by_po_templates.xml',
-        'reports/templates/report_material_balance.xml',
+
+        'reports/x_purchase_report_material_balance.xml',
         'reports/templates/material_balance_templates.xml',
     ],
     'installable': True,
