@@ -32,7 +32,9 @@
         'views/x_purchase_order_search_view.xml',
         # Reports and Templates
         'reports/x_purchase_report.xml',
+        'reports/report_material_balance.xml',
         'reports/templates/payment_report_by_po_templates.xml',
+        'reports/templates/report_material_balance.xml',
     ],
     'installable': True,
     'application': True,
