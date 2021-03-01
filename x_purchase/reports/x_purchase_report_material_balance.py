@@ -26,5 +26,5 @@ class ReportPurchaseMaterialBalance(models.AbstractModel):
             'doc_ids': docids,
             'doc_model': 'purchase.order',
             'docs': docs,
-            'material_balance_items': material_balance_items,
+            'data': material_balance_items,
         }

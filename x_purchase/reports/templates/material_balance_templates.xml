@@ -79,7 +79,7 @@
                 <tbody>
 
                   <br/>
-                  <h2>SQL Result - <span t-esc="material_balance_items['col']"/></h2>
+                  <h2>SQL Result - <span t-esc="data['col']"/></h2>
                   <br/>
 
                 </tbody>
