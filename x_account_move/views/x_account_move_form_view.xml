@@ -9,13 +9,12 @@
       <field name="arch" type="xml">
 
         <xpath expr="//button[@name='action_register_payment']" position="attributes">
-          <attribute name="attrs">{'invisible' : [('state', '!=', '')}</attribute>
+          <attribute name="attrs">{'invisible' : [('state', '!=', '')]}</attribute>
         </xpath>
 
         <xpath expr="//button[@name='action_reverse']" position="attributes">
-          <attribute name="attrs">{'invisible' : [('state', '!=', '')}</attribute>
+          <attribute name="attrs">{'invisible' : [('state', '!=', '')]}</attribute>
         </xpath>
-
 
         <!-- add a tab -->
         <xpath expr="//form/sheet/notebook/page[1]" position="after">
