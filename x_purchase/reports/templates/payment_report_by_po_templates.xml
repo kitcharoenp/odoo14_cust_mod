@@ -801,8 +801,8 @@
                           <li><br/><br/><br/></li>
                           <li>________________</li>
                           <li>______/_____/_____</li>
-                          <li t-if="o.x_requestor_id"><span t-field="o.x_requestor_id.name"/></li>
-                          <li t-if="o.x_requestor_id"><span t-field="o.x_requestor_id.job_id.name"/></li>
+                          <li> </li>
+                          <li>________________</li>
                       </ul>
                   </div>
                   <!-- company accounting director -->
