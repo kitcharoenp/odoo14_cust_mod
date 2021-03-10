@@ -89,8 +89,8 @@
                     <tr class="text-center" style="background-color: #a6a6a6;">
                         <th class="text-left"><strong>No.</strong></th>
                         <th class="text-center col-xs-4"><strong>Description</strong></th>
-                        <th class="text-center" style="font-size: 9px;"><strong>Unit Price</strong></th>
                         <th class="text-center" style="font-size: 9px;"><strong>Quantity</strong></th>
+                        <th class="text-center" style="font-size: 9px;"><strong>UnitPrice</strong></th>
                         <th class="text-center" style="font-size: 9px;"><strong>Subtotal</strong></th>
 
                         <!-- list invoices related to this purchase order  -->
