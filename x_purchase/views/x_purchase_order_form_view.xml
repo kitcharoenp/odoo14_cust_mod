@@ -19,13 +19,27 @@
           </button>
         </div>
 
-        <!-- replace date order by partner_id -->
+        <!-- replace  partner_id set readonly-->
         <xpath expr="//field[@name='partner_id']"
             position="replace">
             <field name="partner_id"
               widget="res_partner_many2one"
               context="{'res_partner_search_mode': 'supplier', 'show_vat': True}"
               placeholder="Name, TIN, Email, or Reference" readonly="1"/>
+        </xpath>
+
+        <!-- replace date order  by project  -->
+        <xpath expr="//field[@name='date_order']"
+            position="replace">
+            <field name="x_project_id"
+              string="Project"
+              options="{'no_create': True}" readonly="1"/>
+        </xpath>
+
+        <!-- replace partner reference by po ref  -->
+        <xpath expr="//field[@name='origin']"
+            position="replace">
+            <field name="date_order" readonly="1"/>
         </xpath>
 
         <!-- overide product_id in Products tab -->
@@ -57,25 +71,43 @@
               optional="show"/>
         </xpath>
 
+        <!-- overide product_qty in Products tab -->
+        <xpath expr="//notebook/page[1]/field/tree/field[@name='product_qty']"
+            position="replace">
+            <field name="product_qty" readonly="1"/>
+        </xpath>
+
+        <!-- overide product_qty in Products tab -->
+        <xpath expr="//notebook/page[1]/field/tree/field[@name='qty_received']"
+            position="replace">
+            <field
+              name="qty_received"
+              string="Received"
+              attrs="{'column_invisible': [
+                ('parent.state', 'not in', ('purchase', 'done'))],
+                'readonly': [('qty_received_method', '!=', 'manual')]}"
+              optional="show"
+              readonly="1" />
+        </xpath>
+
+        <!-- overide product_qty in Products tab -->
+        <xpath expr="//notebook/page[1]/field/tree/field[@name='qty_invoiced']"
+            position="replace">
+            <field
+              name="qty_invoiced"
+              string="Billed"
+              attrs="{'column_invisible': [('parent.state', 'not in', ('purchase', 'done'))]}"
+              optional="show"
+              readonly="1" />
+        </xpath>
+
         <!-- overide price_unit in Products tab -->
         <xpath expr="//notebook/page[1]/field/tree/field[@name='price_unit']"
             position="replace">
             <field name="price_unit" readonly="1"/>
         </xpath>
 
-        <!-- replace date order  by project  -->
-        <xpath expr="//field[@name='date_order']"
-            position="replace">
-            <field name="x_project_id"
-              string="Project"
-              options="{'no_create': True}" readonly="1"/>
-        </xpath>
 
-        <!-- replace partner reference by po ref  -->
-        <xpath expr="//field[@name='origin']"
-            position="replace">
-            <field name="date_order" readonly="1"/>
-        </xpath>
 
         <!-- append Telco to Product tab -->
         <xpath expr="//form/sheet/notebook/page[1]" position="after">
