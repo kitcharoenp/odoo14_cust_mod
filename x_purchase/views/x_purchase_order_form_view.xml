@@ -72,6 +72,12 @@
         </xpath>
 
         <!-- overide product_qty in Products tab -->
+        <xpath expr="//notebook/page[1]/field/tree/field[@name='name']"
+            position="replace">
+            <field name="name" widget="section_and_note_text" readonly="1"/>
+        </xpath>
+
+        <!-- overide product_qty in Products tab -->
         <xpath expr="//notebook/page[1]/field/tree/field[@name='product_qty']"
             position="replace">
             <field name="product_qty" readonly="1"/>
