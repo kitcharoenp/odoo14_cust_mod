@@ -51,7 +51,7 @@
                   'readonly': [(
                       'state',
                       'in',
-                      ('purchase', 'to approve','done', 'cancel')
+                      ('draft', 'sent', 'purchase', 'to approve','done', 'cancel')
                     )],
                   'required': [('display_type', '=', False)],
               }"
@@ -73,22 +73,24 @@
 
         <!-- overide product_qty in Products tab -->
         <xpath expr="//notebook/page[1]/field/tree/field[@name='name']"
-            position="replace">
-            <field name="name" widget="section_and_note_text" readonly="1"/>
+            position="attributes">
+            <attribute name='invisible'>1</attribute>
         </xpath>
 
         <!-- overide product_qty in Products tab -->
         <xpath expr="//notebook/page[1]/field/tree/field[@name='product_qty']"
-            position="replace">
-            <field name="product_qty" readonly="0"/>
+            position="attributes">
+            <attribute name="attrs">
+              {'readonly': [('state', 'in', ('draft', 'sent', 'purchase', 'to approve','done', 'cancel'))]}
+            </attribute>
         </xpath>
-
 
         <xpath expr="//notebook/page[1]/field/tree/field[@name='price_unit']"
-            position="replace">
-            <field name="price_unit" readonly="1"/>
+            position="attributes">
+            <attribute name="attrs">
+              {'readonly': [('state', 'in', ('draft', 'sent', 'purchase', 'to approve','done', 'cancel'))]}
+            </attribute>
         </xpath>
-
 
 
         <!-- append Telco to Product tab -->
