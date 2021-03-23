@@ -83,31 +83,7 @@
             <field name="product_qty" readonly="0"/>
         </xpath>
 
-        <!-- overide product_qty in Products tab -->
-        <xpath expr="//notebook/page[1]/field/tree/field[@name='qty_received']"
-            position="replace">
-            <field
-              name="qty_received"
-              string="Received"
-              attrs="{'column_invisible': [
-                ('parent.state', 'not in', ('purchase', 'done'))],
-                'readonly': [('qty_received_method', '!=', 'manual')]}"
-              optional="show"
-              readonly="0" />
-        </xpath>
 
-        <!-- overide product_qty in Products tab -->
-        <xpath expr="//notebook/page[1]/field/tree/field[@name='qty_invoiced']"
-            position="replace">
-            <field
-              name="qty_invoiced"
-              string="Billed"
-              attrs="{'column_invisible': [('parent.state', 'not in', ('purchase', 'done'))]}"
-              optional="show"
-              readonly="1" />
-        </xpath>
-
-        <!-- overide price_unit in Products tab -->
         <xpath expr="//notebook/page[1]/field/tree/field[@name='price_unit']"
             position="replace">
             <field name="price_unit" readonly="1"/>
