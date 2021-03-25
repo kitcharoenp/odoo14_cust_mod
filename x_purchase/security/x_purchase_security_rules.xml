@@ -21,6 +21,10 @@
           ('order_id.message_partner_ids','child_of',[user.commercial_partner_id.id]),
           ('order_id.partner_id','child_of',[user.commercial_partner_id.id])]</field>
         <field name="groups" eval="[(4, ref('x_purchase.group_purchase_vendor'))]"/>
+        <field name="perm_unlink" eval="0"/>
+        <field name="perm_write" eval="1"/>
+        <field name="perm_read" eval="1"/>
+        <field name="perm_create" eval="0"/>
     </record>
 
     <!-- Account Move -->
