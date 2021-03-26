@@ -681,10 +681,11 @@
                               <t t-else="">
 
                                   <strong><span class="text-nowrap" style="float:left;" t-esc="amount_by_group[0]"/> </strong>
+                                    <!--
                                   <span class="text-nowrap"> on
                                     <t t-esc="amount_by_group[4]"/>
                                   </span>
-
+                                  -->
 
                                   <u>
                                     <strong>
