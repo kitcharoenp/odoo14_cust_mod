@@ -29,30 +29,6 @@
         <field name="perm_create" eval="1"/>
     </record>
 
-    <!-- Purchase Order :  User Group -->
-    <record id="purchase_order_user_rule" model="ir.rule">
-      <field name="name">UserPurchaseOrder</field>
-      <field name="model_id" ref="purchase.model_purchase_order"/>
-      <field name="domain_force">[(1,'=',1)]</field>
-      <field name="groups" eval="[(4, ref('purchase.group_purchase_user'))]"/>
-      <field name="perm_unlink" eval="0"/>
-      <field name="perm_write" eval="1"/>
-      <field name="perm_read" eval="1"/>
-      <field name="perm_create" eval="0"/>
-    </record>
-
-    <!-- Purchase Order Line :  User Group -->
-    <record id="purchase_order_line_user_rule" model="ir.rule">
-      <field name="name">UserPurchaseOrderLine</field>
-      <field name="model_id" ref="purchase.model_purchase_order_line"/>
-      <field name="domain_force">[(1,'=',1)]</field>
-      <field name="groups" eval="[(4, ref('purchase.group_purchase_user'))]"/>
-      <field name="perm_unlink" eval="0"/>
-      <field name="perm_write" eval="1"/>
-      <field name="perm_read" eval="1"/>
-      <field name="perm_create" eval="1"/>
-    </record>
-
     <!-- Account Move  Line :  Vendor Group -->
     <record id="purchase_vendor_account_move_line_rule" model="ir.rule">
         <field name="name">Purchase Vendor Account Move Line</field>
