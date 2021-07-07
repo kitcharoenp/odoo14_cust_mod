@@ -1,0 +1,23 @@
+<?xml version="1.0" encoding="utf-8"?>
+<odoo>
+    <!-- main top menu -->
+    <menuitem
+        id="telco_workorder_menu_view"
+        action="telco_workorder_act_window"
+        groups="base.group_user"
+        name="Work Order"
+        web_icon="telco_work_order,static/description/icon.png"
+    />
+    <!-- sub-menu-->
+    <menuitem
+        id="telco_workorder_title_menu"
+        name="Work Order"
+        parent="telco_workorder_menu_view"
+    />
+
+    <record id="telco_workorder_menu_view"
+            model="ir.ui.menu">
+        <field name="load_xmlid" eval="True"/>
+    </record>
+
+</odoo>
