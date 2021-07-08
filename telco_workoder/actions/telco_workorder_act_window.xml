@@ -1,0 +1,16 @@
+<?xml version="1.0" encoding="utf-8"?>
+<odoo>
+    <record id="telco_workorder_act_window" model="ir.actions.act_window">
+        <field name="name">Telco Work Order</field>
+        <field name="res_model">telco.workorder</field>
+        <field name="view_mode">tree,form</field>
+        <field name="view_id" ref="telco_workorder_tree_view"/>
+        <field name="help" type="html">
+          <p class="o_view_nocontent_smiling_face">
+          Ready to manage your fleet more efficiently ?
+        </p><p>
+          Let's create your first vehicle.
+        </p>
+        </field>
+    </record>
+</odoo>

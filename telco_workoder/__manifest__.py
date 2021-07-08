@@ -6,18 +6,24 @@
 {
     'name': 'Telco Workorder',
     'version': '0.01',
+    'license': 'AGPL-3',
     "author": "Kitcharoen Poolperm <kitcharoenp@gmail.com>",
-    'depends': [],
+    'description': """
+        Work Order for Telecommunication""",
+    'depends': ['base_setup'],
     'data': [
         # Security
-        # Dat
+        # Acion
+        'actions/telco_workorder_act_window.xml',
+
         # Views
+        'views/telco_workorder_menu_view.xml',
         'views/telco_workorder_form_view.xml',
         'views/telco_workorder_tree_view.xml',
-        'views/telco_workorder_menu_view.xml',
         # Search
         # Reports and Templates
     ],
+    'images': ['static/description/icon.png'],
     'installable': True,
     'application': True,
 }

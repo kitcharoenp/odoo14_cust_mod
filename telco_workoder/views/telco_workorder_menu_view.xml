@@ -1,23 +1,11 @@
 <?xml version="1.0" encoding="utf-8"?>
 <odoo>
-    <!-- main top menu -->
+    <!-- sub-menu workorder in menu_purchase_root-->
     <menuitem
-        id="telco_workorder_menu_view"
+        id="telco_workorder_sub_menu"
+        name="Work Order"
+        parent="purchase.menu_procurement_management"
         action="telco_workorder_act_window"
-        groups="base.group_user"
-        name="Work Order"
-        web_icon="telco_work_order,static/description/icon.png"
+        sequence="10"
     />
-    <!-- sub-menu-->
-    <menuitem
-        id="telco_workorder_title_menu"
-        name="Work Order"
-        parent="telco_workorder_menu_view"
-    />
-
-    <record id="telco_workorder_menu_view"
-            model="ir.ui.menu">
-        <field name="load_xmlid" eval="True"/>
-    </record>
-
 </odoo>
