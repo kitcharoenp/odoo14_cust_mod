@@ -3,9 +3,8 @@
     <!-- sub-menu workorder in menu_purchase_root-->
     <menuitem
         id="telco_workorder_sub_menu"
-        name="Work Order"
+        name="WorkOrders"
         parent="purchase.menu_procurement_management"
-        action="telco_workorder_act_window"
-        sequence="10"
+        sequence="100"
     />
 </odoo>

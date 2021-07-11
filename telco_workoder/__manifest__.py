@@ -13,6 +13,9 @@
     'depends': ['base_setup'],
     'data': [
         # Security
+        'security/telco_workorder_groups.xml',
+        'security/ir.model.access.csv',
+        'security/ir_rule.xml',
         # Acion
         'actions/telco_workorder_act_window.xml',
 
