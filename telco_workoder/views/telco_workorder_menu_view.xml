@@ -5,6 +5,7 @@
         id="telco_workorder_sub_menu"
         name="WorkOrders"
         parent="purchase.menu_procurement_management"
+        action="telco_workorder_action"
         sequence="100"
     />
 </odoo>
