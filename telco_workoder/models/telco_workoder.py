@@ -10,24 +10,9 @@ class TelcoWorkorder(models.Model):
 
     name = fields.Char(
         'Work Order',
-        required=True,
-        states={
-            'approved': [('readonly', True)],
-            'rejected': [('readonly', True)]
-            })
+        required=True)
 
-    state = fields.Selection([
-        ('initial', 'Initial'),
-        ('pending_checks', 'Pending Checks'),
-        ('pending_confirmation', 'Pending Confirmation'),
-        ('pending_verification', 'Pending Verification'),
-        ('pending_approval', 'Pending Approval'),
-        ('approved', 'Approved'),
-        ('rejected', 'Rejected')],
-        string='Status',
-        default='initial',
-        copy=False, readonly=True)
-
+    status = fields.Char(string='Status')
     sap_network = fields.Char(string='Sap Network')
     customer = fields.Char(string='Customer')
 
