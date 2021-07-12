@@ -25,7 +25,7 @@ class TelcoWorkorder(models.Model):
         ('approved', 'Approved'),
         ('rejected', 'Rejected')],
         string='Status',
-        default='pending',
+        default='initial',
         copy=False, readonly=True)
 
     sap_network = fields.Char(string='Sap Network')
