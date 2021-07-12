@@ -21,7 +21,7 @@
                 </group>
                 <group string="Other Details">
                   <field name="sap_network"/>
-                  <field name="state"/>
+                  <field name="status"/>
                 </group>
               </group>
               <notebook>
