@@ -1,0 +1,64 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<odoo>
+    <record id="x_stock_picking_form_view" model="ir.ui.view">
+      <field name="name">xstock.picking.form</field>
+      <field name="model">stock.picking</field>
+      <field name="inherit_id" ref="stock.view_picking_form"/>
+      <field name="arch" type="xml">
+
+        <!-- invisible 'Mark as Todo' button -->
+        <xpath expr="//button[@name='action_confirm']" position="attributes">
+          <attribute name="attrs">{'invisible' : [('state', '!=', '')]}</attribute>
+        </xpath>
+
+        <!-- invisible 'Check Availability' button -->
+        <xpath expr="//button[@name='action_assign']" position="attributes">
+          <attribute name="attrs">{'invisible' : [('state', '!=', '')]}</attribute>
+        </xpath>
+
+        <!-- invisible 'Validate' button -->
+        <xpath expr="//button[@name='button_validate']" position="attributes">
+          <attribute name="attrs">{'invisible' : [('state', '!=', '')]}</attribute>
+        </xpath>
+
+        <!-- invisible 'Print' button -->
+        <xpath expr="//button[@name='do_print_picking']" position="attributes">
+          <attribute name="attrs">{'invisible' : [('state', '!=', '')]}</attribute>
+        </xpath>
+
+        <!-- invisible 'Unreserve' button -->
+        <xpath expr="//button[@name='do_unreserve']" position="attributes">
+          <attribute name="attrs">{'invisible' : [('state', '!=', '')]}</attribute>
+        </xpath>
+
+        <!-- invisible 'Print' button -->
+        <xpath expr="//button[@name='%(action_report_delivery)d']" position="attributes">
+          <attribute name="attrs">{'invisible' : [('state', '!=', '')]}</attribute>
+        </xpath>
+
+        <!-- invisible 'Return' button -->
+        <xpath expr="//button[@name='%(act_stock_return_picking)d']" position="attributes">
+          <attribute name="attrs">{'invisible' : [('state', '!=', '')]}</attribute>
+        </xpath>
+
+        <!-- invisible 'Scrap' button -->
+        <xpath expr="//button[@name='button_scrap']" position="attributes">
+          <attribute name="attrs">{'invisible' : [('state', '!=', '')]}</attribute>
+        </xpath>
+
+        <!-- invisible 'Lock' button -->
+        <xpath expr="//button[@name='action_toggle_is_locked']" position="attributes">
+          <attribute name="attrs">{'invisible' : [('state', '!=', '')]}</attribute>
+        </xpath>
+
+        <!-- invisible 'Cancel' button -->
+        <xpath expr="//button[@name='action_cancel']" position="attributes">
+          <attribute name="attrs">{'invisible' : [('state', '!=', '')]}</attribute>
+        </xpath>
+
+
+
+      </field>
+
+    </record>
+</odoo>
