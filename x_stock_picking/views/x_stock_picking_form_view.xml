@@ -96,6 +96,12 @@
           </button>
         </div>
 
+        <!-- insert a `x_workorder_id` field  -->
+        <xpath expr="//field[@name='backorder_id']"
+            position="after">
+            <field name="x_workorder_id" readonly="0"/>
+        </xpath>
+
 
       </field>
 

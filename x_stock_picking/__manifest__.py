@@ -7,7 +7,7 @@
     'description': "",
     'category': 'Inventory/Inventory',
     "author": "Kitcharoen Poolperm <kitcharoenp@gmail.com>",
-    'depends': ['stock'],
+    'depends': ['stock', 'telco_workoder'],
 
     'data': [
         # Views
