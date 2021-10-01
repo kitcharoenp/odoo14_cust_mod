@@ -102,6 +102,13 @@
             <field name="x_workorder_id" readonly="0"/>
         </xpath>
 
+        <!-- insert a `crm_document_name` field  -->
+        <xpath expr="//field[@name='backorder_id']"
+            position="after">
+            <field name="x_crm_document_id" readonly="0"/>
+            <field name="x_crm_document_name" readonly="0"/>
+        </xpath>
+
 
       </field>
 

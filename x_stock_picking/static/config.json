@@ -1,0 +1,13 @@
+{
+	"zurmo": {
+		"url": "http://10.2.111.122:8080",
+		"username": "super", 
+		"password": "poolperm2519"
+	},
+    "db_odoo14_local": {
+		"url": "http://10.2.111.67:8069",
+		"db_name": "prod14",
+		"username": "admin", 
+		"password": "Itel#2018"
+	}
+}    
