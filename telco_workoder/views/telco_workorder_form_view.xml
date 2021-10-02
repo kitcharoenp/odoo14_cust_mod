@@ -22,6 +22,7 @@
                 <group string="Other Details">
                   <field name="sap_network"/>
                   <field name="status"/>
+                  <field name="crm_id"/>
                 </group>
               </group>
               <notebook>

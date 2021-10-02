@@ -8,6 +8,7 @@ from odoo.modules.module import get_module_resource
 
 import requests
 import json
+from urllib import parse
 
 
 class Picking(models.Model):
@@ -21,7 +22,7 @@ class Picking(models.Model):
     x_crm_document_name = fields.Integer('CRM Document')
     
 
-    def _set_crm_conn_params(self):
+    def _get_crm_conn_params(self):
         json_path = get_module_resource('x_stock_picking', 'static/', 'config.json')
         with open(json_path) as f:
             data = json.load(f)
@@ -31,7 +32,7 @@ class Picking(models.Model):
         return crm_param
 
     def _request_session(self):
-        data = self._set_crm_conn_params()
+        data = self._get_crm_conn_params()
 
         login_header={
             'Accept': 'application/json',
@@ -54,13 +55,77 @@ class Picking(models.Model):
 
         # closing the connection
         respose_login.close()
+        
+        headers = {
+            'Accept': 'application/json',
+            'ZURMO_SESSION_ID': authenticationData['sessionId'],
+            'ZURMO_TOKEN': authenticationData['token'],
+            'ZURMO_API_REQUEST_TYPE': 'REST'}
 
-        return authenticationData['sessionId'], authenticationData['token']
+        session.headers.update(headers)
+        return session
 
+
+    def flat_key(self, layer):
+        """ Example: flat_key(["1","2",3,4]) -> "1[2][3][4]" """
+        if len(layer) == 1:
+            return layer[0]
+        else:
+            _list = ["[{}]".format(k) for k in layer[1:]]
+            return layer[0] + "".join(_list)
+
+    def flat_dict(self, _dict):
+        if not isinstance(_dict, dict):
+            raise TypeError("argument must be a dict, not {}".format(type(_dict)))
+
+        def __flat_dict(pre_layer, value):
+            result = {}
+            for k, v in value.items():
+                layer = pre_layer[:]
+                layer.append(k)
+                if isinstance(v, dict):
+                    result.update(__flat_dict(layer,v))
+                else:
+                    result[self.flat_key(layer)] = v
+            return result
+        return __flat_dict([], _dict)
+
+    def get_api_endpoint(self, id:int = 0, module_name:str = 'materialsControl', action:str = 'read') -> str:
+    
+        if action == 'create':
+            endpoint = '/app/index.php/'+module_name+'s/'+module_name+'/api/create/'
+        elif action == 'create': 
+            endpoint = '/app/index.php/'+module_name+'s/'+module_name+'/api/update/'+str(id)
+        else:
+            endpoint = '/app/index.php/'+module_name+'s/'+module_name+'/api/read/'+str(id)
+            
+        return endpoint
+
+
+    def api_read_crm_workorder(self):
+        # get session with auth data
+        session = self._request_session()
+
+        # get params from json file
+        data = self._get_crm_conn_params()
+
+        # get api read endpoint by id
+        endpoint = self.get_api_endpoint(self.x_workorder_id.crm_id, module_name = 'workorder', action='read')
+
+        _url = data['url'] + endpoint
+
+        # make api request get data
+        response = session.get(_url)
+
+        # closing the connection
+        response.close()
+
+        workorder = json.loads(response.text)
+        return workorder
 
     def action_sync(self):
         for picking in self:
             picking.update({
-                'note': self._request_session(),
+                'note': self.api_read_crm_workorder(),
             })
         return True

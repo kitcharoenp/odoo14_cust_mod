@@ -12,6 +12,8 @@ class TelcoWorkorder(models.Model):
         'Work Order',
         required=True)
 
+    crm_id = fields.Integer('CRM Id')
+
     status = fields.Char(string='Status')
     sap_network = fields.Char(string='Sap Network')
     customer = fields.Char(string='Customer')
