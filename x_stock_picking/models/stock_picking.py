@@ -3,12 +3,13 @@
 # @copyright Copyright (C) 2021
 # @license http://opensource.org/licenses/gpl-3.0.html GNU Public License
 
-from odoo import models, fields
+from odoo import api, fields, models
 from odoo.modules.module import get_module_resource
 
 import requests
 import json
 from urllib import parse
+from datetime import datetime
 
 
 class Picking(models.Model):
@@ -19,7 +20,7 @@ class Picking(models.Model):
         string="WorkOrder")
     
     x_crm_document_id = fields.Integer('CRM Document Id')
-    x_crm_document_name = fields.Integer('CRM Document')
+    x_crm_document_name = fields.Char('CRM Document')
     
 
     def _get_crm_conn_params(self):
@@ -65,7 +66,6 @@ class Picking(models.Model):
         session.headers.update(headers)
         return session
 
-
     def flat_key(self, layer):
         """ Example: flat_key(["1","2",3,4]) -> "1[2][3][4]" """
         if len(layer) == 1:
@@ -91,41 +91,280 @@ class Picking(models.Model):
         return __flat_dict([], _dict)
 
     def get_api_endpoint(self, id:int = 0, module_name:str = 'materialsControl', action:str = 'read') -> str:
-    
-        if action == 'create':
-            endpoint = '/app/index.php/'+module_name+'s/'+module_name+'/api/create/'
-        elif action == 'create': 
-            endpoint = '/app/index.php/'+module_name+'s/'+module_name+'/api/update/'+str(id)
-        else:
-            endpoint = '/app/index.php/'+module_name+'s/'+module_name+'/api/read/'+str(id)
-            
-        return endpoint
-
-
-    def api_read_crm_workorder(self):
-        # get session with auth data
-        session = self._request_session()
 
         # get params from json file
         data = self._get_crm_conn_params()
+    
+        if action == 'create':
+            endpoint = '/app/index.php/'+module_name+'s/'+module_name+'/api/create/'
+        elif action == 'update': 
+            endpoint = '/app/index.php/'+module_name+'s/'+module_name+'/api/update/'+str(id)
+        elif action == 'list':
+            endpoint = '/app/index.php/'+module_name+'s/'+module_name+'/api/list/filter/'
+        else:
+            endpoint = '/app/index.php/'+module_name+'s/'+module_name+'/api/read/'+str(id)
+            
+        return data['url'] + endpoint
 
-        # get api read endpoint by id
-        endpoint = self.get_api_endpoint(self.x_workorder_id.crm_id, module_name = 'workorder', action='read')
+    def resolve_sapMovement_type(self, sap_network_prefix:str = 'WON', is_outbound:bool = 1):
+        # check picking_type
+        if self.picking_type_id.code == 'incoming':
+            is_outbound = 0
 
-        _url = data['url'] + endpoint
+        sap_movement_type = dict()
+        sap_movement_type[1] = dict()
+        sap_movement_type[0] = dict()
+        sap_movement_type[1]['WON'] = 'Z81_REQ_for_ServiceOrder'
+        sap_movement_type[1]['WOP'] = 'Z01_REQ_for_Project'
+        sap_movement_type[1]['WOR'] = 'Z61_REQ_for_Maintenance_WorkOrder'
 
-        # make api request get data
-        response = session.get(_url)
+        sap_movement_type[0]['WON'] = 'Z82_RET_for_ServiceOrder'
+        sap_movement_type[0]['WOP'] = 'Z02_RET_for_Project'
+        sap_movement_type[0]['WOR'] = 'Z62_RET_for_Maintenance_WorkOrder'
+        
+        return sap_movement_type[is_outbound][sap_network_prefix]
 
-        # closing the connection
-        response.close()
+    def make_crm_materials_control_payload(self):
 
-        workorder = json.loads(response.text)
-        return workorder
+        workorder = self.api_read_crm('workorder', self.x_workorder_id.crm_id)
+        warehouse = self.api_read_crm('warehouse', 1858)
+
+        sap_network_prefix = workorder['data']['sapNetworkPrefix']
+
+        # resolve `sap_movement_type` from `workorder`
+        sap_movement_type = self.resolve_sapMovement_type(sap_network_prefix)
+
+        now = datetime.now()
+
+        payload = {
+            "data": {
+                "name": 'New',
+                'status' : {'value' : 'Initial'},
+
+                "odooDocument": self.name,
+                "odooDocumentId": self.id,
+                
+                # resolve from sapNetworkPrefix and is_outbound
+                'sapMovementType' : {'value' : sap_movement_type},
+                #'explicitReadWriteModelPermissions': {'type': 1},
+
+                # resolve from workorder
+                'workorder' : {'id' : workorder['data']['id']},
+                'owner' : {'id' : workorder['data']['supervisor']['id']},
+                'supervisor' : {'id' : workorder['data']['supervisor']['id']},
+                'recipient' : {'id' : workorder['data']['supervisor']['id']},
+                'confirmedBy' : {'id' : workorder['data']['supervisor']['id']},
+                "description": workorder['data']['company_B'] + workorder['data']['description'] + + ' odoo_update : '+str(now),
+                    
+                # resolve from Warehouse
+                'warehouse' : {'id' : warehouse['data']['id']},
+                'storeKeeper' : {'id' : warehouse['data']['storeKeeper']['id']},
+                'warehouseController' : {'id' : warehouse['data']['warehouseController']['id']},
+
+                # resolve Contractor
+
+                'checkedStatus' : {'value' : ''},
+                'confirmedStatus' : {'value' : ''},
+                'verifiedStatus' : {'value' : ''},
+                'approvedStatus' : {'value' : ''},
+
+                # TODO : mapping vendor field
+            }
+        }
+
+        return payload
+
+    def make_crm_payload_materials_control_update(self, payload:str = {}):
+
+        now = datetime.now()
+
+        if self.x_crm_document_id > 0:
+            res = self.api_read_crm('materialsControl', self.x_crm_document_id)
+            
+            payload = {
+                "data": {
+                    #"description": res['data']['description'] + ' odoo_update : '+str(now)
+                    "description": ' odoo_update : '+str(now)
+                }
+            }
+        return payload
+
+    def api_read_crm(self, module_name:str = 'materialsControl', record_id:int = 1):
+        
+        endpoint = self.get_api_endpoint(record_id, module_name, action='read')
+
+        # get session with auth data
+
+        with self._request_session() as s:
+        
+            response = s.get(endpoint)
+
+            json_res = json.loads(response.text)
+
+            # closing the connection
+            response.close()
+    
+            return json_res
+
+    def api_update_crm(self, module_name:str = 'materialsControl', record_id:int = 1, payload:str = {}):
+        
+        endpoint = self.get_api_endpoint(record_id, module_name, action='update')
+
+        with self._request_session() as s:
+
+            # Encoded into a URL string
+            url_str = parse.urlencode(self.flat_dict(payload))  
+        
+            response = s.put(endpoint, data=url_str)
+
+            json_res = json.loads(response.text)
+
+             # closing the connection
+            response.close()
+            
+            return json_res
+
+    def api_crm_list_by_field(self, module_name:str='materialsControl', field:str='name', value:str='') -> str:
+
+        endpoint = self.get_api_endpoint(module_name=module_name, action='list')
+
+        payload = {
+            "search": {
+                field: value,
+            }
+        }
+        
+        with self._request_session() as s:
+
+            # Encoded into a URL string
+            payload_urlstr = parse.urlencode(self.flat_dict(payload))  
+        
+            response = s.get(endpoint+payload_urlstr)
+
+            json_res = json.loads(response.text)
+
+             # closing the connection
+            response.close()
+            
+            return json_res
+
+    def search_materialsControl_items_by_code_and_smaterialsControl_id(self, module_name:str='billofMaterial', field:str='code', value:str='') -> str:
+
+        endpoint = self.get_api_endpoint(module_name=module_name, action='list')
+
+        payload = {
+            "search": {
+                field: value,
+                'materialsControl' : {'id': self.x_crm_document_id}
+            }
+        }
+        
+        with self._request_session() as s:
+
+            # Encoded into a URL string
+            payload_urlstr = parse.urlencode(self.flat_dict(payload))  
+        
+            response = s.get(endpoint+payload_urlstr)
+
+            json_res = json.loads(response.text)
+
+             # closing the connection
+            response.close()
+            
+            return json_res
+
+    def api_create_crm(self, payload:str, module_name:str = 'materialsControl'):
+
+        endpoint = self.get_api_endpoint(module_name=module_name, action='create')
+
+        with self._request_session() as s:
+
+            # Encoded into a URL string
+            payload_urlstr = parse.urlencode(self.flat_dict(payload))  
+        
+            response = s.put(endpoint, data=payload_urlstr)
+
+            json_res = json.loads(response.text)
+
+            # closing the connection
+            response.close()
+    
+            return json_res
 
     def action_sync(self):
+
         for picking in self:
+
+            if self.x_crm_document_id > 0:
+
+                # update crm materialsControl record
+                payload = self.make_crm_payload_materials_control_update()
+                crm_materialsControl = self. api_update_crm('materialsControl', self.x_crm_document_id, payload)
+                
+                # create / update materialsControl items
+                for m in picking.move_lines:
+                    now = datetime.now()
+                    code = m.product_id.default_code
+
+                    # 1. search crm productTemplate by `code`
+                    _product_templates  = self.api_crm_list_by_field(module_name='productTemplate', field='code', value=code)
+                    
+                    # 2. search crm materialsControl item by `code` and materialsControl `id`
+                    materialsControl_items = self.search_materialsControl_items_by_code_and_smaterialsControl_id(value=code)
+                    
+                    # 4. if code is exist update else create
+                    if materialsControl_items['data']['totalCount'] > 0:
+                        payload = {
+                            "data": {
+                                'plannedQuantity': m.quantity_done,
+                                'identitynumber': m.description_picking,
+                                'description': ' odoo_update : ' + str(now),
+                                'owner' : {'id' : crm_materialsControl['data']['owner']['id']},
+                            }  
+                        }
+
+                        # 4.1 update
+                        materialsControl_item_id = materialsControl_items['data']['items'][0]['id']
+
+                        # update materialsControl_item by id
+                        crm_materialsControl_item = self.api_update_crm('billofMaterial', materialsControl_item_id, payload)
+                    
+                    else:
+                        # 4.2 create
+                        if _product_templates['data']['totalCount'] > 0:
+                            product_template = _product_templates['data']['items'][0]
+
+                            payload = {
+                                "data": { 
+                                    'materialitem': {'id': product_template['id']},
+                                    'name': product_template['name'],
+                                    'code': product_template['code'],
+                                    'unit': product_template['unit'],
+                                    'priceperunit': {
+                                        'value' : product_template['cost']['value'],
+                                        'currency' : {'id' : 2}
+                                    },
+
+                                    'materialsControl': {'id': self.x_crm_document_id},
+
+                                    'plannedQuantity': m.quantity_done,
+                                    'identitynumber': m.description_picking,
+
+                                    'description': ' odoo_update : '+str(now) + product_template['name'],
+                                    # set owner from materialsControl owner
+                                    'owner' : {'id' : crm_materialsControl['data']['owner']['id']},
+                                }
+                            }
+
+                            crm_materialsControl_item = self.api_create_crm(payload, module_name='billofMaterial')
+            else:
+                # create a new crm materialsControl record
+                payload = self.make_crm_materials_control_payload()
+                crm_materialsControl = self.api_create_crm(payload, 'materialsControl')
+
+            # update odoo record
             picking.update({
-                'note': self.api_read_crm_workorder(),
+                'x_crm_document_id': crm_materialsControl['data']['id'],
+                'x_crm_document_name': crm_materialsControl['data']['name'],
             })
-        return True
+        return True 
