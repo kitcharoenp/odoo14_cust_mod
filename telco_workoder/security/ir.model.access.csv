@@ -1,3 +1,0 @@
-id,name,model_id:id,group_id:id,perm_read,perm_write,perm_create,perm_unlink
-access_telco_workorder_officer,telco.workorder.officer,model_telco_workorder,group_telco_workorder_officer,1,1,1,1
-access_telco_workorder_user,telco.workorder.user,model_telco_workorder,base.group_user,1,0,0,0
