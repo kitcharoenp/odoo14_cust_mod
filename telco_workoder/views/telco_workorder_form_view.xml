@@ -5,7 +5,7 @@
     <field name="model">telco.workorder</field>
     <field name="arch" type="xml">
 
-          <form string="Telco Workorder">
+          <form string="Telco Workorder" delete="false" create="false" edit="false">
             <sheet string="Telco Workorder">
               <div>
                 <h1>
