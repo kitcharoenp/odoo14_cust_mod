@@ -10,7 +10,7 @@
     "author": "Kitcharoen Poolperm <kitcharoenp@gmail.com>",
     'description': """
         Work Order for Telecommunication""",
-    'depends': ['base_setup', 'x_stock_picking'],
+    'depends': ['base_setup'],
     'data': [
         # Security
         'security/telco_workorder_groups.xml',
