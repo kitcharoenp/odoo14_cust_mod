@@ -1,6 +1,6 @@
 # -*- coding: utf-8 -*-
 
-from odoo import api, fields, models
+from odoo import fields, models
 
 
 class TelcoWorkorder(models.Model):
@@ -23,3 +23,48 @@ class TelcoWorkorder(models.Model):
     noc_case_id = fields.Char(string='NOC Case Id')
 
     description = fields.Text('Description')
+    cont_stock_picking_incoming = fields.Integer(
+        compute="_compute_count_all", 
+        string='Incoming Count')
+    cont_stock_picking_outgoing = fields.Integer(
+        compute="_compute_count_all", 
+        string='Outgoing Count')
+
+
+    def _compute_count_all(self):
+        StockPicking = self.env['stock.picking']
+
+        for record in self:
+            record.cont_stock_picking_incoming = StockPicking.search_count([
+                    ('x_workorder_id', '=', record.id), 
+                    ('picking_type_id', '=', 1)
+                ])
+
+            record.cont_stock_picking_outgoing = StockPicking.search_count([
+                    ('x_workorder_id', '=', record.id), 
+                    ('picking_type_id', '=', 2)
+                ])
+
+    # TODO: fix picking_type_id 1,2
+
+    def open_stock_picking_incoming(self):
+        self.ensure_one()
+        return {
+            'type': 'ir.actions.act_window',
+            'name': 'Receipts',
+            'view_mode': 'tree,kanban,form',
+            'res_model': 'stock.picking',
+            'domain': [('x_workorder_id', '=', self.id), ('picking_type_id', '=', 1)],
+            'context': {'default_x_workorder_id': self.id,  'default_picking_type_id': 1}
+        }
+
+    def open_stock_picking_outgoing(self):
+        self.ensure_one()
+        return {
+            'type': 'ir.actions.act_window',
+            'name': 'Delivery',
+            'view_mode': 'tree,kanban,form',
+            'res_model': 'stock.picking',
+            'domain': [('x_workorder_id', '=', self.id), ('picking_type_id', '=', 2)],
+            'context': {'default_x_workorder_id': self.id,  'default_picking_type_id': 2}
+        }

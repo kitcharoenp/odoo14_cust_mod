@@ -26,6 +26,7 @@ class Picking(models.Model):
 
     def _get_crm_conn_params(self):
         json_path = get_module_resource('x_stock_picking', 'static/', 'config.json')
+        
         with open(json_path) as f:
             data = json.load(f)
 

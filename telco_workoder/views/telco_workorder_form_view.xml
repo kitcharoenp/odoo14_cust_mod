@@ -12,6 +12,23 @@
                   <field name="name" nolabel="1" readonly="1"/>
                 </h1>
               </div>
+              <div class="oe_button_box" name="button_box">
+
+                <button name="open_stock_picking_incoming"
+                  type="object"
+                  class="oe_stat_button"
+                  icon="fa-history">
+                  <field name="cont_stock_picking_incoming" widget="statinfo" string="Incoming"/>
+                </button>
+
+                <button name="open_stock_picking_outgoing"
+                  type="object"
+                  class="oe_stat_button"
+                  icon="fa-history">
+                  <field name="cont_stock_picking_outgoing" widget="statinfo" string="Outgoing"/>
+                </button>
+
+              </div>
               <group col="2">
                 <group string="Customer Details">
                   <field name="customer" readonly="1"/>
