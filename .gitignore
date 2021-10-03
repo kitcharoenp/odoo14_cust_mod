@@ -127,3 +127,6 @@ dmypy.json
 
 # Pyre type checker
 .pyre/
+
+# config file
+/opt/odoo14_cust_mod/x_stock_picking/static/config.json
