@@ -145,6 +145,7 @@ class Picking(models.Model):
 
                 "odooDocument": self.name,
                 "odooDocumentId": self.id,
+                "odooNote": self.note + ' odoo_update : '+str(now),
                 
                 # resolve from sapNetworkPrefix and is_outbound
                 'sapMovementType' : {'value' : sap_movement_type},
@@ -156,7 +157,7 @@ class Picking(models.Model):
                 'supervisor' : {'id' : workorder['data']['supervisor']['id']},
                 'recipient' : {'id' : workorder['data']['supervisor']['id']},
                 'confirmedBy' : {'id' : workorder['data']['supervisor']['id']},
-                "description": workorder['data']['company_B'] + workorder['data']['description'] + + ' odoo_update : '+str(now),
+                "description": workorder['data']['company_B'] + workorder['data']['description'],
                     
                 # resolve from Warehouse
                 'warehouse' : {'id' : warehouse['data']['id']},
@@ -185,8 +186,7 @@ class Picking(models.Model):
             
             payload = {
                 "data": {
-                    #"description": res['data']['description'] + ' odoo_update : '+str(now)
-                    "description": ' odoo_update : '+str(now)
+                    "odooNote": self.note + ' odoo_update : '+str(now),
                 }
             }
         return payload
