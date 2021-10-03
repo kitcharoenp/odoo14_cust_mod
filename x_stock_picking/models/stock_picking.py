@@ -130,7 +130,7 @@ class Picking(models.Model):
 
         workorder = self.api_read_crm('workorder', self.x_workorder_id.crm_id)
         warehouse = self.api_read_crm('warehouse', 1858)
-        warehouse = self.api_read_crm('warehouse', 1867) 
+        warehouse = self.api_read_crm('warehouse', 1867)
 
         sap_network_prefix = workorder['data']['sapNetworkPrefix']
 
@@ -146,7 +146,7 @@ class Picking(models.Model):
 
                 "odooDocument": self.name,
                 "odooDocumentId": self.id,
-                "odooNote": self.note + ' odoo_update : '+str(now),
+                "odooNote": str(self.note) + ' odoo_update : '+str(now),
                 
                 # resolve from sapNetworkPrefix and is_outbound
                 'sapMovementType' : {'value' : sap_movement_type},
@@ -187,7 +187,7 @@ class Picking(models.Model):
             
             payload = {
                 "data": {
-                    "odooNote": self.note + ' odoo_update : '+str(now),
+                    "odooNote": str(self.note) + ' odoo_update : '+str(now),
                 }
             }
         return payload
