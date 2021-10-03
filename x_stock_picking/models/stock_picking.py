@@ -130,6 +130,7 @@ class Picking(models.Model):
 
         workorder = self.api_read_crm('workorder', self.x_workorder_id.crm_id)
         warehouse = self.api_read_crm('warehouse', 1858)
+        warehouse = self.api_read_crm('warehouse', 1867) 
 
         sap_network_prefix = workorder['data']['sapNetworkPrefix']
 
