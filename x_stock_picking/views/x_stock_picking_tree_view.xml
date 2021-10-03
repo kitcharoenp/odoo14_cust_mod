@@ -1,0 +1,63 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<odoo>
+    <record id="x_stock_picking_tree_view" model="ir.ui.view">
+      <field name="name">xstock.picking.tree</field>
+      <field name="model">stock.picking</field>
+      <field name="inherit_id" ref="stock.vpicktree"/>
+      <field name="arch" type="xml">
+
+      <!-- hide 'delete' button -->
+        <xpath expr="//tree" position="attributes">
+                <attribute name="delete">false</attribute>
+        </xpath>
+
+        <xpath expr="//tree" position="attributes">
+                <attribute name="edit">false</attribute>
+        </xpath>
+
+        <!-- invisible 'do_unreserve' button -->
+        <xpath expr="//button[@name='do_unreserve']" position="attributes">
+          <attribute name="invisible">1</attribute>
+        </xpath>
+
+        <!-- invisible partner_id  -->
+        <xpath expr="//field[@name='partner_id']"
+          position="attributes">
+              <attribute name="readonly">1</attribute>
+        </xpath>
+
+        <!-- invisible user_id  -->
+        <xpath expr="//field[@name='user_id']"
+          position="attributes">
+              <attribute name="readonly">1</attribute>
+              <attribute name="optional">show</attribute>
+        </xpath>
+
+        <!-- invisible origin  -->
+        <xpath expr="//field[@name='scheduled_date']"
+          position="attributes">
+              <attribute name="invisible">1</attribute>
+        </xpath>
+
+        <!-- invisible origin  -->
+        <xpath expr="//field[@name='origin']"
+          position="attributes">
+              <attribute name="invisible">1</attribute>
+        </xpath>
+
+        <!-- insert a `x_workorder_id` field  -->
+        <xpath expr="//field[@name='origin']"
+            position="after">
+            <field name="x_workorder_id" readonly="1"/>
+        </xpath>
+
+        <!-- insert a `x_crm_document_name` field  -->
+        <xpath expr="//field[@name='origin']"
+            position="after">
+            <field name="x_crm_document_name" readonly="1"/>
+        </xpath>
+
+
+      </field>
+    </record>
+</odoo>

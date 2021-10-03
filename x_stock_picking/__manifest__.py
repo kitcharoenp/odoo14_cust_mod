@@ -12,6 +12,7 @@
     'data': [
         # Views
         'views/x_stock_picking_form_view.xml',
+        'views/x_stock_picking_tree_view.xml',
     ],
 
     'installable': True,

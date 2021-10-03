@@ -11,6 +11,11 @@
                 <attribute name="duplicate">false</attribute>
         </xpath>
 
+        <!-- hide 'create' button -->
+        <xpath expr="//form" position="attributes">
+                <attribute name="create">false</attribute>
+        </xpath>
+
         <!-- hide 'delete' button -->
         <xpath expr="//form" position="attributes">
                 <attribute name="delete">false</attribute>
@@ -102,8 +107,33 @@
             <field name="x_workorder_id" readonly="1"/>
         </xpath>
 
+        <!-- set readonly attribute -->
+        <xpath expr="//field[@name='partner_id']" position="attributes">
+          <attribute name="readonly">1</attribute>
+        </xpath>
+        
+        <xpath expr="//field[@name='picking_type_id']" position="attributes">
+          <attribute name="readonly">1</attribute>
+        </xpath>
+
+        <xpath expr="//field[@name='scheduled_date']" position="attributes">
+         <attribute name="invisible">1</attribute>
+        </xpath>
+
+        <xpath expr="//field[@name='date_done']" position="attributes">
+          <attribute name="invisible">1</attribute>
+        </xpath>
+
+        <xpath expr="//field[@name='date_deadline']" position="attributes">
+          <attribute name="invisible">1</attribute>
+        </xpath>
+
+        <xpath expr="//field[@name='origin']" position="attributes">
+          <attribute name="invisible">1</attribute>
+        </xpath>
+
         <!-- insert a `crm_document_name` field  -->
-        <xpath expr="//field[@name='backorder_id']"
+        <xpath expr="//field[@name='date_done']"
             position="after">
             <field name="x_crm_document_id" readonly="1"/>
             <field name="x_crm_document_name" readonly="1"/>
