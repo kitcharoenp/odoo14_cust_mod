@@ -21,6 +21,7 @@ class Picking(models.Model):
     
     x_crm_document_id = fields.Integer('CRM Document Id')
     x_crm_document_name = fields.Char('CRM Document')
+    x_crm_document_status = fields.Char('CRM Status')
     
 
     def _get_crm_conn_params(self):
@@ -366,5 +367,6 @@ class Picking(models.Model):
             picking.update({
                 'x_crm_document_id': crm_materialsControl['data']['id'],
                 'x_crm_document_name': crm_materialsControl['data']['name'],
+                'x_crm_document_status': crm_materialsControl['data']['status']['value'],
             })
         return True 

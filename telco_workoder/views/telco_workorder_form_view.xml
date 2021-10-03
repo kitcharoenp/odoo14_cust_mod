@@ -9,25 +9,26 @@
             <sheet string="Telco Workorder">
               <div>
                 <h1>
-                  <field name="name" nolabel="1"/>
+                  <field name="name" nolabel="1" readonly="1"/>
                 </h1>
               </div>
               <group col="2">
                 <group string="Customer Details">
-                  <field name="customer"/>
-                  <field name="service_ref1"/>
-                  <field name="service_ref2"/>
-                  <field name="noc_case_id"/>
+                  <field name="customer" readonly="1"/>
+                  <field name="service_ref1" readonly="1"/>
+                  <field name="service_ref2" readonly="1"/>
+                  <field name="noc_case_id" readonly="1"/>
                 </group>
                 <group string="Other Details">
-                  <field name="sap_network"/>
-                  <field name="status"/>
-                  <field name="crm_id"/>
+                  <field name="sap_network" readonly="1"/>
+                  <field name="status" readonly="1"/>
+                  <field name="crm_id" readonly="1"/>
                 </group>
               </group>
               <notebook>
                 <page string="Description">
-                  <field name='description' nolabel="1"
+                  <field name='description' nolabel="1" 
+                    readonly="1"
                     placeholder="Description of Work Order ......."/>
                 </page>
               </notebook>
