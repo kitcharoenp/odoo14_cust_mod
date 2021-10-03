@@ -1,0 +1,40 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<odoo>
+
+  <record id="x_purchase_order_tree_view" model="ir.ui.view">
+      <field name="name">x purchase order tree</field>
+      <field name="model">purchase.order</field>
+      <field name="inherit_id"
+          ref="purchase.purchase_order_tree"/>
+      <field name="arch" type="xml">
+
+        <!-- invisible date_order  -->
+        <xpath expr="//field[@name='date_order']"
+          position="attributes">
+              <attribute name="optional">hide</attribute>
+        </xpath>
+
+        <!-- invisible date_planned  -->
+        <xpath expr="//field[@name='date_planned']"
+          position="attributes">
+              <attribute name="optional">hide</attribute>
+        </xpath>
+
+        <!-- invisible company_id  -->
+        <xpath expr="//field[@name='company_id']"
+          position="attributes">
+              <attribute name="optional">hide</attribute>
+        </xpath>
+
+        <!-- show x_project_id after   partner_id-->
+        <xpath expr="//field[@name='partner_id']"
+          position="after">
+          <field name="x_project_id"
+              options="{'no_create': True}"/>
+          <field name="x_sap_network"/>
+        </xpath>
+
+      </field>
+  </record>
+
+</odoo>
