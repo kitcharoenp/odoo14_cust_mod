@@ -126,19 +126,22 @@ class Picking(models.Model):
         
         return sap_movement_type[is_outbound][sap_network_prefix]
 
-    def make_crm_materials_control_payload(self):
+    def crm_materials_control_payload_create_new(self):
 
         workorder = self.api_read_crm('workorder', self.x_workorder_id.crm_id)
-        warehouse = self.api_read_crm('warehouse', 1858)
-        warehouse = self.api_read_crm('warehouse', 1867)
 
         sap_network_prefix = workorder['data']['sapNetworkPrefix']
 
         # resolve `sap_movement_type` from `workorder`
         sap_movement_type = self.resolve_sapMovement_type(sap_network_prefix)
 
-        now = datetime.now()
+        _warehouses  = self.api_crm_list_by_field(
+            module_name='warehouse', field='name', value='ODOO_SUB')
 
+        if _warehouses['data']['totalCount'] > 0:
+            warehouse = _warehouses['data']['items'][0]
+
+        now = datetime.now()
         payload = {
             "data": {
                 "name": 'New',
@@ -161,9 +164,9 @@ class Picking(models.Model):
                 "description": workorder['data']['company_B'] + workorder['data']['description'],
                     
                 # resolve from Warehouse
-                'warehouse' : {'id' : warehouse['data']['id']},
-                'storeKeeper' : {'id' : warehouse['data']['storeKeeper']['id']},
-                'warehouseController' : {'id' : warehouse['data']['warehouseController']['id']},
+                'warehouse' : {'id' : warehouse['id']},
+                'storeKeeper' : {'id' : warehouse['storeKeeper']['id']},
+                'warehouseController' : {'id' : warehouse['warehouseController']['id']},
 
                 # resolve Contractor
 
@@ -294,15 +297,32 @@ class Picking(models.Model):
     
             return json_res
 
+    def create_new_materials_control(self, picking):
+        # create a new crm materialsControl record
+        payload = self.crm_materials_control_payload_create_new()
+        crm_materialsControl = self.api_create_crm(payload, 'materialsControl')
+
+        # update odoo record
+        picking.update({
+            'x_crm_document_id': crm_materialsControl['data']['id'],
+            'x_crm_document_name': crm_materialsControl['data']['name'],
+            'x_crm_document_status': crm_materialsControl['data']['status']['value'],
+        })
+
     def action_sync(self):
 
         for picking in self:
+
+            # create a new crm materials_control record
+            if not (self.x_crm_document_id > 0):
+                self.create_new_materials_control(picking)
+            
 
             if self.x_crm_document_id > 0:
 
                 # update crm materialsControl record
                 payload = self.make_crm_payload_materials_control_update()
-                crm_materialsControl = self. api_update_crm('materialsControl', self.x_crm_document_id, payload)
+                crm_materialsControl = self.api_update_crm('materialsControl', self.x_crm_document_id, payload)
                 
                 # create / update materialsControl items
                 for m in picking.move_lines:
@@ -360,15 +380,5 @@ class Picking(models.Model):
                             }
 
                             crm_materialsControl_item = self.api_create_crm(payload, module_name='billofMaterial')
-            else:
-                # create a new crm materialsControl record
-                payload = self.make_crm_materials_control_payload()
-                crm_materialsControl = self.api_create_crm(payload, 'materialsControl')
 
-            # update odoo record
-            picking.update({
-                'x_crm_document_id': crm_materialsControl['data']['id'],
-                'x_crm_document_name': crm_materialsControl['data']['name'],
-                'x_crm_document_status': crm_materialsControl['data']['status']['value'],
-            })
         return True 
