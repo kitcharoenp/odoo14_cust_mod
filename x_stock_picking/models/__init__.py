@@ -4,3 +4,4 @@
 # @license http://opensource.org/licenses/gpl-3.0.html GNU Public License
 
 from . import stock_picking
+from . import stock_move
