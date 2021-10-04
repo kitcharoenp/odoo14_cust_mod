@@ -93,10 +93,12 @@
 
         <!-- 'Sync' button -->
         <div name="button_box" position="inside">
-          <button type="object"
+          <button 
+              type="object"
               name="action_sync"
               string="Sync"
               class="oe_stat_button"
+              attrs="{'invisible': [('x_workorder_id', '=', False), ('x_workorder_id', '=', False)]}"
               icon="fa-sync">
           </button>
         </div>
