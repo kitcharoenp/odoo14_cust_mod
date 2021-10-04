@@ -345,7 +345,7 @@ class Picking(models.Model):
                         payload = {
                             "data": {
                                 'plannedQuantity': m.x_plan_qty,
-                                'identitynumber':  m.x_drum_no + ' [ ' + str(m.x_mark1) + ' / ' + str(m.x_mark2) +' ]',
+                                'identitynumber':  str(m.x_drum_no) + ' [ ' + str(m.x_mark1) + ' / ' + str(m.x_mark2) +' ]',
                                 #'mark1': m.x_mark1,
                                 #'mark2': m.x_mark2,
                                 'description': ' odoo_update : ' + str(now),
@@ -378,7 +378,7 @@ class Picking(models.Model):
                                     'materialsControl': {'id': self.x_crm_document_id},
 
                                     'plannedQuantity': m.x_plan_qty,
-                                    'identitynumber':  m.x_drum_no + ' [ ' + str(m.x_mark1) + ' / ' + str(m.x_mark2) +' ]',
+                                    'identitynumber':  str(m.x_drum_no) + ' [ ' + str(m.x_mark1) + ' / ' + str(m.x_mark2) +' ]',
                                     #'mark1': m.x_mark1,
                                     #'mark2': m.x_mark2,
 

@@ -149,9 +149,6 @@
             name="product_id" 
             required="1" 
             context="{'default_type': 'product'}" 
-            attrs="{'readonly': ['|', 
-            ('parent.x_crm_document_status', '!=', ''), 
-            ('parent.x_crm_document_status', '!=', 'Initial')]}"
           />
         </xpath>
 
@@ -177,29 +174,10 @@
         <!-- insert fields before 'product_uom_qty' field  -->
         <xpath expr="//page[@name='operations']//field[@name='product_uom_qty']" 
             position="before">
-          <field name="x_plan_qty" 
-            attrs="{'readonly': ['|', 
-            ('parent.x_crm_document_status', '!=', ''), 
-            ('parent.x_crm_document_status', '!=', 'Initial')]}"
-          />
-
-          <field name="x_drum_no" optional="hide"
-            attrs="{'readonly': ['|', 
-            ('parent.x_crm_document_status', '!=', ''), 
-            ('parent.x_crm_document_status', '!=', 'Initial')]}"
-          />
-          <field name="x_mark1" optional="hide"
-            attrs="{'readonly': ['|', 
-            ('parent.x_crm_document_status', '!=', ''), 
-            ('parent.x_crm_document_status', '!=', 'Initial')]}"
-          />
-
-          <field name="x_mark2" 
-            optional="hide"
-            attrs="{'readonly': ['|', 
-            ('parent.x_crm_document_status', '!=', ''), 
-            ('parent.x_crm_document_status', '!=', 'Initial')]}"
-          />
+          <field name="x_plan_qty" />
+          <field name="x_drum_no" optional="hide"/>
+          <field name="x_mark1" optional="hide"/>
+          <field name="x_mark2" optional="hide"/>
 
         </xpath>
 
