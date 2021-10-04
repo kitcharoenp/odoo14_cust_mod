@@ -190,7 +190,7 @@ class Picking(models.Model):
             
             payload = {
                 "data": {
-                    'odooNote': ' odoo_update : '+str(now),
+                    'odooNote': str(self.partner_id.name) + ' odoo_update : '+str(now),
                 }
             }
         return payload
