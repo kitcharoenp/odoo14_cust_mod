@@ -190,7 +190,7 @@ class Picking(models.Model):
             
             payload = {
                 "data": {
-                    "odooNote": str(self.note) + ' odoo_update : '+str(now),
+                    'odooNote': ' odoo_update : '+str(now),
                 }
             }
         return payload
@@ -313,7 +313,7 @@ class Picking(models.Model):
 
         for picking in self:
 
-            # create a new crm materials_control record
+            # 1. create a new crm materials_control record if x_crm_document_id is null
             if not (self.x_crm_document_id > 0):
                 self.create_new_materials_control(picking)
             
@@ -323,6 +323,11 @@ class Picking(models.Model):
                 # update crm materialsControl record
                 payload = self.make_crm_payload_materials_control_update()
                 crm_materialsControl = self.api_update_crm('materialsControl', self.x_crm_document_id, payload)
+
+                # update x_crm_document_status
+                picking.update({
+                    'x_crm_document_status': crm_materialsControl['data']['status']['value'],
+                })
                 
                 # create / update materialsControl items
                 for m in picking.move_lines:
@@ -339,8 +344,10 @@ class Picking(models.Model):
                     if materialsControl_items['data']['totalCount'] > 0:
                         payload = {
                             "data": {
-                                'plannedQuantity': m.quantity_done,
-                                'identitynumber': m.description_picking,
+                                'plannedQuantity': m.x_plan_qty,
+                                'identitynumber':  m.x_drum_no + ' [ ' + str(m.x_mark1) + ' / ' + str(m.x_mark2) +' ]',
+                                #'mark1': m.x_mark1,
+                                #'mark2': m.x_mark2,
                                 'description': ' odoo_update : ' + str(now),
                                 'owner' : {'id' : crm_materialsControl['data']['owner']['id']},
                             }  
@@ -370,8 +377,10 @@ class Picking(models.Model):
 
                                     'materialsControl': {'id': self.x_crm_document_id},
 
-                                    'plannedQuantity': m.quantity_done,
-                                    'identitynumber': m.description_picking,
+                                    'plannedQuantity': m.x_plan_qty,
+                                    'identitynumber':  m.x_drum_no + ' [ ' + str(m.x_mark1) + ' / ' + str(m.x_mark2) +' ]',
+                                    #'mark1': m.x_mark1,
+                                    #'mark2': m.x_mark2,
 
                                     'description': ' odoo_update : '+str(now) + product_template['name'],
                                     # set owner from materialsControl owner
