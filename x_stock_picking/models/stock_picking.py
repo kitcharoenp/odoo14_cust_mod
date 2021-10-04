@@ -328,6 +328,10 @@ class Picking(models.Model):
                 picking.update({
                     'x_crm_document_status': crm_materialsControl['data']['status']['value'],
                 })
+
+                # udpate materialsControl items only status is 'Initial'
+                if crm_materialsControl['data']['status']['value'] != 'Initial':
+                    return True
                 
                 # create / update materialsControl items
                 for m in picking.move_lines:
