@@ -10,6 +10,7 @@
     'depends': ['stock', 'telco_workoder'],
 
     'data': [
+        'security/x_stock_picking_rules.xml',
         # Views
         'views/x_stock_picking_form_view.xml',
         'views/x_stock_picking_tree_view.xml',

@@ -14,3 +14,13 @@ class StockMove(models.Model):
     x_drum_no = fields.Char('Drum No.')
     x_mark1 = fields.Integer('Mark1')
     x_mark2 = fields.Integer('Mark2')
+
+    # overide `product_id` field for filter only 'default_code' ilike 'ZOFC' or 'ZSPA'
+    product_id = fields.Many2one(
+        'product.product', 'Product',
+        check_company=True,
+        domain="[('type', 'in', ['product', 'consu']), \
+        '|', ('company_id', '=', False), ('company_id', '=', company_id), \
+        '|', ('default_code', 'ilike', 'ZOFC'), ('default_code', 'ilike', 'ZSPA')]", 
+        index=True, required=True,
+        states={'done': [('readonly', True)]})

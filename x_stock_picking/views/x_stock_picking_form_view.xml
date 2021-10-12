@@ -149,6 +149,7 @@
             name="product_id" 
             required="1" 
             context="{'default_type': 'product'}" 
+            options="{'no_open': True, 'no_create': True}"
           />
         </xpath>
 
