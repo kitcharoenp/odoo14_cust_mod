@@ -254,13 +254,44 @@ class Picking(models.Model):
             
             return json_res
 
-    def search_materialsControl_items_by_code_and_smaterialsControl_id(self, module_name:str='billofMaterial', field:str='code', value:str='') -> str:
+    def search_materialsControl_items_by_code_and_materialsControl_id(self, module_name:str='billofMaterial', field:str='code', value:str='') -> str:
 
         endpoint = self.get_api_endpoint(module_name=module_name, action='list')
 
         payload = {
             "search": {
                 field: value,
+                'materialsControl' : {'id': self.x_crm_document_id}
+            }
+        }
+        
+        with self._request_session() as s:
+
+            # Encoded into a URL string
+            payload_urlstr = parse.urlencode(self.flat_dict(payload))  
+        
+            response = s.get(endpoint+payload_urlstr)
+
+            json_res = json.loads(response.text)
+
+             # closing the connection
+            response.close()
+            
+            return json_res
+
+
+    def search_mc_items_by_code_drum_and_materialsControl_id(
+            self, 
+            module_name:str='billofMaterial', 
+            code_value:str='', 
+            drum_no:str='') -> str:
+    
+        endpoint = self.get_api_endpoint(module_name=module_name, action='list')
+
+        payload = {
+            "search": {
+                'code': code_value,
+                'identitynumber': drum_no,
                 'materialsControl' : {'id': self.x_crm_document_id}
             }
         }
@@ -309,27 +340,37 @@ class Picking(models.Model):
             'x_crm_document_status': crm_materialsControl['data']['status']['value'],
         })
 
+    def create_update_materials_control(self, picking):
+
+        # create a new crm materials_control record if x_crm_document_id is null
+        if not (self.x_crm_document_id > 0):
+            self.create_new_materials_control(picking)
+
+        # Update crm materialsControl record
+        if self.x_crm_document_id > 0:
+            
+            payload = self.make_crm_payload_materials_control_update()
+            crm_materialsControl = self.api_update_crm('materialsControl', self.x_crm_document_id, payload)
+
+            # update x_crm_document_status
+            crm_materialsControl = self.api_read_crm('materialsControl', self.x_crm_document_id)
+            picking.update({
+                    'x_crm_document_status': crm_materialsControl['data']['status']['value'],
+                })
+
     def action_sync(self):
 
         for picking in self:
 
-            # 1. create a new crm materials_control record if x_crm_document_id is null
-            if not (self.x_crm_document_id > 0):
-                self.create_new_materials_control(picking)
-            
+            self.create_update_materials_control(picking)
 
             if self.x_crm_document_id > 0:
 
-                # update crm materialsControl record
-                payload = self.make_crm_payload_materials_control_update()
-                crm_materialsControl = self.api_update_crm('materialsControl', self.x_crm_document_id, payload)
+                # TODO: set security only owner can update
 
-                # update x_crm_document_status
-                picking.update({
-                    'x_crm_document_status': crm_materialsControl['data']['status']['value'],
-                })
+                crm_materialsControl = self.api_read_crm('materialsControl', self.x_crm_document_id)
 
-                # udpate materialsControl items only status is 'Initial'
+                # Create / udpate materialsControl items only status is 'Initial'
                 if crm_materialsControl['data']['status']['value'] != 'Initial':
                     return True
                 
@@ -338,18 +379,31 @@ class Picking(models.Model):
                     now = datetime.now()
                     code = m.product_id.default_code
 
+                    plan_qty = m.x_plan_qty,
+                    identitynumber = ''
+
+                    if code[:4] == 'ZOFC':
+                        plan_qty = abs(m.x_mark1 - m.x_mark2)
+                        identitynumber = str(m.x_drum_no) + ' [ ' + str(m.x_mark1) + ' / ' + str(m.x_mark2) +' ]'
+
                     # 1. search crm productTemplate by `code`
-                    _product_templates  = self.api_crm_list_by_field(module_name='productTemplate', field='code', value=code)
+                    _product_templates  = self.api_crm_list_by_field(
+                        module_name='productTemplate', field='code', value=code)
                     
                     # 2. search crm materialsControl item by `code` and materialsControl `id`
-                    materialsControl_items = self.search_materialsControl_items_by_code_and_smaterialsControl_id(value=code)
+                    materialsControl_items = self.search_materialsControl_items_by_code_and_materialsControl_id(value=code)
                     
-                    # 4. if code is exist update else create
+                    if code[:4] == 'ZOFC':
+                        materialsControl_items = self.search_mc_items_by_code_drum_and_materialsControl_id(
+                            code_value=code, drum_no=str(m.x_drum_no))
+                    
+                    # Found item : Update
                     if materialsControl_items['data']['totalCount'] > 0:
+
                         payload = {
                             "data": {
-                                'plannedQuantity': m.x_plan_qty,
-                                'identitynumber':  str(m.x_drum_no) + ' [ ' + str(m.x_mark1) + ' / ' + str(m.x_mark2) +' ]',
+                                'plannedQuantity': plan_qty,
+                                'identitynumber':  identitynumber,
                                 #'mark1': m.x_mark1,
                                 #'mark2': m.x_mark2,
                                 'description': ' odoo_update : ' + str(now),
@@ -381,8 +435,8 @@ class Picking(models.Model):
 
                                     'materialsControl': {'id': self.x_crm_document_id},
 
-                                    'plannedQuantity': m.x_plan_qty,
-                                    'identitynumber':  str(m.x_drum_no) + ' [ ' + str(m.x_mark1) + ' / ' + str(m.x_mark2) +' ]',
+                                    'plannedQuantity': plan_qty,
+                                    'identitynumber':  identitynumber,
                                     #'mark1': m.x_mark1,
                                     #'mark2': m.x_mark2,
 
