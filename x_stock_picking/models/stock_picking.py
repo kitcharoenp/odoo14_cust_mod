@@ -255,7 +255,7 @@ class Picking(models.Model):
             return json_res
 
     def search_materialsControl_items_by_code_and_materialsControl_id(self, module_name:str='billofMaterial', field:str='code', value:str='') -> str:
-
+    
         endpoint = self.get_api_endpoint(module_name=module_name, action='list')
 
         payload = {
@@ -379,7 +379,7 @@ class Picking(models.Model):
                     now = datetime.now()
                     code = m.product_id.default_code
 
-                    plan_qty = m.x_plan_qty,
+                    plan_qty = m.x_plan_qty
                     identitynumber = ''
 
                     if code[:4] == 'ZOFC':
