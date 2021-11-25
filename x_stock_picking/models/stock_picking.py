@@ -153,7 +153,10 @@ class Picking(models.Model):
                 
                 # resolve from sapNetworkPrefix and is_outbound
                 'sapMovementType' : {'value' : sap_movement_type},
-                #'explicitReadWriteModelPermissions': {'type': 1},
+
+                # Defines the type as being the everyone group.
+                # const MIXED_TYPE_EVERYONE_GROUP    = 1;
+                'explicitReadWriteModelPermissions': {'type': 1},
 
                 # resolve from workorder
                 'workorder' : {'id' : workorder['data']['id']},
@@ -423,7 +426,10 @@ class Picking(models.Model):
                             product_template = _product_templates['data']['items'][0]
 
                             payload = {
-                                "data": { 
+                                "data": {
+                                    # Defines the type as being the everyone group.
+                                    # const MIXED_TYPE_EVERYONE_GROUP    = 1;
+                                    'explicitReadWriteModelPermissions': {'type': 1},
                                     'materialitem': {'id': product_template['id']},
                                     'name': product_template['name'],
                                     'code': product_template['code'],
