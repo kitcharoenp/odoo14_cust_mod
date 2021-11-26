@@ -71,11 +71,6 @@
           <attribute name="attrs">{'invisible' : [('state', '!=', '')]}</attribute>
         </xpath>
 
-        <!-- invisible 'Cancel' button -->
-        <xpath expr="//button[@name='action_cancel']" position="attributes">
-          <attribute name="attrs">{'invisible' : [('state', '!=', '')]}</attribute>
-        </xpath>
-
         <!-- invisible 'Scraps' button -->
         <xpath expr="//button[@name='action_see_move_scrap']" position="attributes">
           <attribute name="attrs">{'invisible' : [('state', '!=', '')]}</attribute>
