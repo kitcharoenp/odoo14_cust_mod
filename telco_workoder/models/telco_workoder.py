@@ -58,6 +58,7 @@ class TelcoWorkorder(models.Model):
             'domain': [
                 ('x_workorder_id', '=', self.id), 
                 ('picking_type_id', '=', 1),
+                ('state', '!=', 'cancel'),
             ],
             'context': {
                 'default_x_workorder_id': self.id,  
@@ -76,6 +77,7 @@ class TelcoWorkorder(models.Model):
             'domain': [
                 ('x_workorder_id', '=', self.id),
                 ('picking_type_id', '=', 2),
+                ('state', '!=', 'cancel'),
             ],
             'context': {
                 'default_x_workorder_id': self.id,
